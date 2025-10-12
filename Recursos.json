@@ -1,0 +1,83 @@
+{
+ "eventos":[
+    {
+        "nombre": "Telescopio Principal",
+        "tipo": "Herramienta",
+        "disponibilidad": true,
+        "cantidad": 1
+
+    },
+    {
+        "nombre": "Telescopios pequenos",
+        "tipo": "herramienta",
+        "disponibilidad": true,
+        "cantidad": 20
+    },
+    {
+        "nombre": "Computadoras",
+        "tipo": "Herramienta",
+        "disponibilidad": true,
+        "cantidad": 20
+    },
+    {
+        "nombre": "Cupulas de observacion",
+        "tipo": "sala",
+        "disponibilidad": true,
+        "cantidad": 1
+    },
+    {
+        "nombre": "Sala de exposiciones",
+        "tipo": "sala",
+        "disponibilidad": true,
+        "cantidad": 1
+    },
+    {
+        "nombre": "Cupula de fotografia",
+        "tipo": "sala",
+        "disponibilidad": true,
+        "cantidad": 1
+    },
+    {
+         "nombre": "Sala del telescopio principal",
+        "tipo": "sala",
+        "disponibilidad": true,
+        "cantidad": 1
+    },
+    {
+         "nombre": "Planetario",
+        "tipo": "sala",
+        "disponibilidad": true,
+        "cantidad": 1
+    },
+    {
+     "nombre": "Guia de exposiciones",
+        "tipo": "personal",
+        "disponibilidad": true,
+        "cantidad": 1
+    },
+        {
+     "nombre": "Operador del telescopio principal",
+        "tipo": "personal",
+        "disponibilidad": true,
+        "cantidad": 1
+    },
+        {
+     "nombre": "Astronomo de la cupula",
+        "tipo": "personal",
+        "disponibilidad": true,
+        "cantidad": 1
+    },
+        {
+     "nombre": "Profesor de conferencias",
+        "tipo": "personal",
+        "disponibilidad": true,
+        "cantidad": 1
+    },
+        {
+     "nombre": "Imagenologo de galaxias",
+        "tipo": "personal",
+        "disponibilidad": true,
+        "cantidad": 1
+    }
+]
+}
