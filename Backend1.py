@@ -1,13 +1,16 @@
 import json 
 import datetime
 
+#Ruta de los archivos Json
 ruta_eventos = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Eventos.json"
 ruta_recursos = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Recursos.json"
 
+#Funcion para leer los json
 def leer_json(ruta):
     with open(ruta,"r") as elementos:
         return json.load(elementos)
 
+#Clase recurso
 class Recurso:
     def __init__(self,nombre,tipo,disponibilidad,cantidad):
         self.nombre = nombre
@@ -21,6 +24,8 @@ class Recurso:
             "disponibilidad" : self.disponibilidad,
             "cantidad" : self.cantidad
         }
+
+#Clase evento
 class Evento:
     def __init__(self,nombre,inicio,fin,recursos):
         self.nombre = nombre
@@ -34,25 +39,27 @@ class Evento:
             "fin" : self.fin.strftime("%Y-%m-%d-%H-%M"),
             "recursos" : self.recursos
         }
+
+#Clase planificador donde contiene todas las funciones
 class Planificador:
     def __init__(self,ruta_eventos="/home/adan/Adan/Programacion/Projects/Project Pro 1/Eventos.json",ruta_recursos="/home/adan/Adan/Programacion/Projects/Project Pro 1/Recursos.json"):
         self.eventos = []
         self.json_eventos = ruta_eventos
         self.json_recursos = ruta_recursos
         self.recursos = []
-        self.mantener_eventos()
+        self.cargar_eventos()
         self.cargar_recursos()
     
-    def mantener_eventos(self):
-        eventos_json = leer_json(self.json_eventos)
-        for e in eventos_json.get("eventos"):
+    #Guardar los eventos del json en una lista
+    def cargar_eventos(self):
+        eventos_json = leer_json(self.json_eventos) #Leer el json y guardar su contenido en la variable eventos_json
+        for e in eventos_json.get("eventos"): 
             inicio = datetime.datetime.strptime(e["inicio"], "%Y-%m-%d-%H-%M") 
             fin = datetime.datetime.strptime(e["fin"], "%Y-%m-%d-%H-%M")
             eventos_anteriores = Evento(e["nombre"], inicio, fin, e["recursos"])
             self.eventos.append(eventos_anteriores)
 
-        
-
+    #Guardar los recursos del json en una lista 
     def cargar_recursos(self):
         recursos_data = leer_json(self.json_recursos)
         #Guardando los recursos en una lista para poder ser iterados
@@ -60,21 +67,7 @@ class Planificador:
             recurso = Recurso(r["nombre"],r["tipo"],r["disponibilidad"],r["cantidad"])
             self.recursos.append(recurso)
 
-
-    #Funcion para mantener los eventos en una lista eventos y asi evitar que se borren cuando se sobrescriba     
-
-    #Funcion para actualizar los recursos del json despues de agrgar un evento
-    '''def actualizar_recursos(self,evento):
-        #Actualizando la cantidad de cada recurso 
-        for r in evento.recursos:
-            for recur in self.recursos:
-                if r[0] == recur.nombre:
-                    recur.cantidad -= r[1]
-        #Sobrescribienodo el archivo json de recursos con los nuevos cambios
-        lista_recursos = [r.convertir_dicc() for r in self.recursos]
-        with open(self.json_recursos,"w") as recursos_json:
-            recursos_json.write(json.dumps({"recursos" : lista_recursos},indent=4))'''
-
+    #Verificar si 2 eventos estan en el mismo horario
     def verificar_hora(self,ini_ev,ini_evs,fin_ev,fin_evs):
         band = False
         if (ini_ev<=ini_evs and fin_ev>ini_evs) or (ini_ev>=ini_evs and ini_ev<fin_evs):
@@ -83,6 +76,12 @@ class Planificador:
 
     #Funcion para agregar evento al json
     def agregar_evento(self,evento):
+        for r in evento.recursos:
+            for rec in self.recursos:
+                if r[0]==rec.nombre:
+                    if r[1] > rec.cantidad:
+                        print(f"No hay suficientes {r[0]}, solo hay {rec.cantidad} disponibles")
+                        return False
         disp= 1000000
         for r in evento.recursos:
             for e in self.eventos:
@@ -99,7 +98,7 @@ class Planificador:
                             
                             disp -= rec[1]
                             if disp < r[1]:
-                                print(f"No hay suficientes {r[0]} disponibles en ese horario, solo se tienen {disp}")
+                                print(f"No hay suficientes {r[0]} disponibles en ese horario, solo hay {disp} disponibles")
                                 return False
 
         self.eventos.append(evento)
@@ -110,10 +109,10 @@ class Planificador:
         return True
 
 evento1 = Evento(
-    nombre = "Observacion 3",
+    nombre = "Observacion 1",
     inicio = datetime.datetime(2024,10,4,11,00),
     fin = datetime.datetime(2024,10,4,12,00),
-    recursos = [("Computadoras",15)]
+    recursos = [("Operador del telescopio principal",25)]
 )
 
 operaciones = Planificador()
