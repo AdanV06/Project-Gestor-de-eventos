@@ -1,32 +1,85 @@
 {
- "recursos":[
+"recursos": [
     {
-        "nombre": "Telescopio Principal",
+        "nombre": "Polarimetro",
+        "tipo": "herramienta",
+        "disponibilidad": true,
+        "cantidad":1
+    },
+    {
+        "nombre": "Camara estelar",
         "tipo": "Herramienta",
         "disponibilidad": true,
         "cantidad": 1
-
     },
-    {
-        "nombre": "Telescopios pequenos",
-        "tipo": "herramienta",
-        "disponibilidad": true,
-        "cantidad": 20
-    },
-    {
-        "nombre": "Computadoras",
+        {
+        "nombre": "Espectrometro",
         "tipo": "Herramienta",
         "disponibilidad": true,
-        "cantidad": 20
+        "cantidad": 1
+    },
+        {
+        "nombre": "Telescopio de galaxias",
+        "tipo": "Herramienta",
+        "disponibilidad": true,
+        "cantidad": 1
+    },
+        {
+        "nombre": "Portatiles",
+        "tipo": "Herramienta",
+        "disponibilidad": true,
+        "cantidad": 1
+    },
+        {
+        "nombre": "Telescopio de agujeros negros",
+        "tipo": "Herramienta",
+        "disponibilidad": true,
+        "cantidad": 1
+    },
+        {
+        "nombre": "Gafas virtuales",
+        "tipo": "Herramienta",
+        "disponibilidad": true,
+        "cantidad": 1
+    },
+        {
+        "nombre": "Telescopio Lunar",
+        "tipo": "Herramienta",
+        "disponibilidad": true,
+        "cantidad": 1
+    },
+        {
+        "nombre": "Telescopio de Rayos Gama",
+        "tipo": "Herramienta",
+        "disponibilidad": true,
+        "cantidad": 1
+    },
+        {
+        "nombre": "Telescopio Solar",
+        "tipo": "Herramienta",
+        "disponibilidad": true,
+        "cantidad": 1
     },
     {
-        "nombre": "Cupulas de observacion",
+        "nombre": "Radio Telescopio",
+        "tipo": "Herramienta",
+        "disponibilidad": true,
+        "cantidad": 1
+    },
+        {
+        "nombre": "Telescopio Simple",
+        "tipo": "Herramienta",
+        "disponibilidad": true,
+        "cantidad": 1
+    },
+    {
+        "nombre": "Planetario",
         "tipo": "sala",
         "disponibilidad": true,
         "cantidad": 1
     },
     {
-        "nombre": "Sala de exposiciones",
+        "nombre": "Sala del telescopio",
         "tipo": "sala",
         "disponibilidad": true,
         "cantidad": 1
@@ -38,46 +91,64 @@
         "cantidad": 1
     },
     {
-         "nombre": "Sala del telescopio principal",
-        "tipo": "sala",
+        "nombre": "Sala de conferencias", 
+        "tipo": "personal",
         "disponibilidad": true,
         "cantidad": 1
     },
     {
-         "nombre": "Planetario",
-        "tipo": "sala",
+        "nombre": "Cupula de observacion", 
+        "tipo": "personal",
         "disponibilidad": true,
         "cantidad": 1
     },
     {
-     "nombre": "Guia de exposiciones",
+        "nombre": "Henrietta Leavitt", 
         "tipo": "personal",
         "disponibilidad": true,
         "cantidad": 1
     },
-        {
-     "nombre": "Operador del telescopio principal",
+    {
+        "nombre": "Edwin Huble", 
         "tipo": "personal",
         "disponibilidad": true,
         "cantidad": 1
     },
-        {
-     "nombre": "Astronomo de la cupula",
+    {
+        "nombre": "No c", 
         "tipo": "personal",
         "disponibilidad": true,
         "cantidad": 1
     },
-        {
-     "nombre": "Profesor de conferencias",
+    {
+        "nombre": "Roger Penrose",
         "tipo": "personal",
         "disponibilidad": true,
         "cantidad": 1
     },
-        {
-     "nombre": "Imagenologo de galaxias",
+    {
+        "nombre": "Margaret Burbidge",
+        "tipo": "personal",
+        "disponibilidad": true,
+        "cantidad": 1
+    },
+    {
+        "nombre": "Hans Bethe",
+        "tipo": "personal",
+        "disponibilidad": true,
+        "cantidad": 1
+    },
+    {
+        "nombre": "Neil Tyson",
+        "tipo": "personal",
+        "disponibilidad": true,
+        "cantidad": 1
+    },
+    {
+        "nombre": "Stiphen Hawking",
         "tipo": "personal",
         "disponibilidad": true,
         "cantidad": 1
     }
-]
+    ]
 }

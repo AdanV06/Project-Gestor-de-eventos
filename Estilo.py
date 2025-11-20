@@ -1,6 +1,4 @@
-
 kv = '''
-
 <BoxL>:
     size_hint: None,None 
     size: 900,700
@@ -132,6 +130,26 @@ kv = '''
             pos: self.pos
             size: self.size
 
-    
-    
+<informacion_personaje>:
+    size_hint: None,None 
+    size: 700,210   
+    orientation: "horizontal"
+
+    canvas.before:
+        Color: 
+            rgba: 0,0,0,0.3
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<informacion>:
+    canvas.before:
+        Color: 
+            rgba: 0.2,0,0.5,0.2
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        
+
+
 '''

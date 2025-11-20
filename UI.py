@@ -15,6 +15,7 @@ from kivy.uix.gridlayout import GridLayout
 import datetime
 import calendar
 from Estilo import kv
+from Imagenes import*
 
 Window.size = (1150,900)
 
@@ -24,9 +25,36 @@ class evento:
     recursos_persona = []
     recursos_herramienta = []
     recursos_sala = []
-    nombre = []
-    fecha = []
     datos = {}
+
+class informacion(Label):
+    def __init__(self,inf):
+        super().__init__()
+        self.markup=True
+        self.text=inf
+        self.font_size = 20       
+        self.text_size=(460,110)
+        self.size_hint=(None,None)
+        self.valign='top'
+        self.size=(480,202)
+        #self.pos_hint = {"center_x": 0,"center_y":0.5}
+
+
+
+class informacion_personaje(BoxLayout):
+    def __init__(self,imagen,inf):
+        super().__init__()
+        self.imagen = Image(source=imagen,size_hint=(None,None),size=(180,180), pos_hint = {"center_x": 0,"center_y":0.5})
+        self.informacion = informacion(inf=inf)
+        self.spacing = 2
+
+        self.espacio = filas(orientacion="horizontal",tamano=(30,0),espacio=2)
+
+        self.add_widget(self.espacio)
+        self.add_widget(self.imagen)
+        self.add_widget(self.informacion)
+
+        
 
 class nombres(Label):
     def __init__(self,texto):
@@ -75,44 +103,65 @@ class BotonHerramientas(ButtonBehavior,Image):
         self.grid = GridLayout(cols=5,spacing=40)
         self.row4 =FloatLayout(size_hint=(None,None),size=(725,140),pos=self.pos)
 
-        self.p1 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_1hxsj21hxsj21hxs.png"
-        self.p2 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_2mdp3w2mdp3w2mdp.png"
-        self.p3 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_2mmv5r2mmv5r2mmv.png"
-        self.p4 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_98n6d698n6d698n6.png"
-        self.p5 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_czxmoeczxmoeczxm.png"
-        self.p6 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_iktxediktxediktx.png"
-        self.p7 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_iudpr3iudpr3iudp.png"
-        self.p8 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_izk5ekizk5ekizk5.png"
-        self.p9 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_nz9ai9nz9ai9nz9a.png"
-        self.p10 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_qfio6yqfio6yqfio.png"
-        self.p11 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_tx3ambtx3ambtx3a.png"
-        self.p12 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_u9ll5su9ll5su9ll.png"
-        self.p13 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_nthhyhnthhyhnthh.png"
-
-        opciones = [(1,self.p1),(2,self.p2),(3,self.p3),(4,self.p4),(5,self.p5),(6,self.p6),(7,self.p7),(8,self.p8),(9,self.p9),
-        (10,self.p10),(11,self.p11),(12,self.p12),(13,self.p13)]
+        opciones = [("Polarimetro",objeto2,obj2),("Camara estelar",objeto3,obj3),("Espectrometro",objeto4,obj4),("Telescopio de Galaxias",objeto5,obj5),("Portatiles",objeto6,obj6),("Telescopio de agujeros negros",objeto7,obj7),("Gafas virtuales",objeto8,obj8),("Telescopio lunar",objeto9,obj9),
+        ("Telescopio de Rayos Gama",objeto10,obj10),("Telescopio solar",objeto11,obj11),("Radio Telescopio",objeto12,obj12),("Telescopio simple",objeto13,obj13)]
 
         self.all_opciones = []
-        for opcion,img in opciones:
-            btn = OpcionPersonal(
+        for opcion,img,info in opciones:
+            btn = OpcionHerramienta(
             opcion=opcion,
             size_hint=(None, None),
             size=(80, 80),
             allow_stretch=True,
             source = img,
             state='down' if opcion in self.opciones_seleccionadas else 'normal',
-            img_press= "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Guardar_Touch.png"
+            img_press= "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Guardar_Touch.png",
+            inf = info
             )
             self.all_opciones.append(btn)
             self.grid.add_widget(btn)
+
+        self.fila = informacion_personaje(imagen=objeto1,inf="")
         
+
         self.boton_aceptar = botonAceptar(all_opciones=self.all_opciones,popup=self.popup_H,Id="Herramienta")
         self.boton_salir = botonSalir(popup=self.popup_H)
         self.row4.add_widget(self.boton_aceptar)
         self.row4.add_widget(self.boton_salir)
         self.contenedor.add_widget(self.grid)
+        self.contenedor.add_widget(self.fila)
         self.contenedor.add_widget(self.row4)
         self.menu_H.add_widget(self.contenedor)
+
+class OpcionHerramienta(ButtonBehavior, Image):
+    def __init__(self, opcion,img_press,inf, **kwargs):
+        super().__init__(**kwargs)
+        self.opcion = opcion
+        self.seleccionado = False
+        self.img = self.source
+        self.size_hint = (None,None)
+        self.size = (100,100)
+        self.img_press = img_press
+        self.inf = inf
+ 
+    def on_touch_down(self,touch):
+        if self.collide_point(*touch.pos):
+            apps = App.get_running_app()
+            apps.contenedor.body.nueva_ventana.recursos_herramienta.fila.imagen.source = self.img
+            apps.contenedor.body.nueva_ventana.recursos_herramienta.fila.informacion.text = self.inf
+            if self.state=="normal":
+                self.state = 'down'
+
+            else: 
+                self.state = 'normal'
+            self.on_press()
+        
+    def on_press(self):
+        self.seleccionado = not self.seleccionado
+        if self.seleccionado:
+            self.source = self.img_press
+        else:
+            self.source = self.img  # Imagen cuando no está seleccionado
         
 class BotonPersonal(ButtonBehavior,Image):
         def __init__(self):
@@ -137,28 +186,13 @@ class BotonPersonal(ButtonBehavior,Image):
             self.grid = GridLayout(cols=5,spacing=(40,20),rows=5,size_hint=(None,None),size=(300,400))
             self.contenedor = Contenedor_Recursos()
             self.row4 =FloatLayout(size_hint=(None,None),size=(725,140),pos=self.pos)
-            self.fila = filas(orientacion="vertical",tamano=(700,210),espacio=0)
 
-            self.p1 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_1oeimx1oeimx1oei.png"
-            self.p2 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_2hqe7c2hqe7c2hqe.png"
-            self.p3 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_4wxxcw4wxxcw4wxx.png"
-            self.p4 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_egvy09egvy09egvy.png"
-            self.p5 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_i15n42i15n42i15n.png"
-            self.p6 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_lzntnplzntnplznt.png"
-            self.p7 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_n343ibn343ibn343.png"
-            self.p8 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_pgqci1pgqci1pgqc.png"
-            self.p9 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_rt9orart9orart9o.png"
-            self.p10 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_w63t9uw63t9uw63t.png"
-            self.p11 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_ug969bug969bug96.png"
-            self.p12 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_wpdhhswpdhhswpdh.png"
-            self.p13 = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Gemini_Generated_Image_xbjwuuxbjwuuxbjw.png"
-
-            opciones = [("Carl Sagan",self.p1),("Vera Rubin",self.p2),("Henrietta Leavitt",self.p3),("Arthur Eddington",self.p4),("Edwin Huble",self.p5),(6,self.p6),("Roger Penrose",self.p7),("Margaret Burbidge",self.p8),("Hans Bethe",self.p9),
-            ("Neil Tyson",self.p10),("Stiphen Hawking",self.p11)]
+            opciones = [("Carl Sagan",persona1,inf1),("Vera Rubin",persona2,inf2),("Henrietta Leavitt",persona3,inf3),("Edwin Huble",persona5,inf5),(6,persona6,inf6),("Roger Penrose",persona7,inf7),("Margaret Burbidge",persona8,inf8),("Hans Bethe",persona9,inf9),
+            ("Neil Tyson",persona10,inf10),("Stiphen Hawking",persona11,inf11)]
 
             self.all_opciones = []
 
-            for opcion,img in opciones:
+            for opcion,img,informacion in opciones:
                 btn = OpcionPersonal(
                 opcion=opcion,
                 size_hint=(None, None),
@@ -166,14 +200,17 @@ class BotonPersonal(ButtonBehavior,Image):
                 allow_stretch=True,
                 source = img,
                 state='down' if opcion in self.opciones_seleccionadas else 'normal',
-                img_press = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Guardar_Touch.png"
+                img_press = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Guardar_Touch.png",
+                inf=informacion
                 )
                 
                 self.all_opciones.append(btn)
                 self.grid.add_widget(btn)
-
-            for b in self.all_opciones:
-                print(b.state)
+            
+            #Informacion del recurso
+            self.fila = informacion_personaje(imagen=persona1,inf="")
+            
+            
 
             #Creando los botones de accion:
             self.boton_aceptar = botonAceptar(all_opciones=self.all_opciones,popup=self.popup,Id="Persona")
@@ -233,7 +270,7 @@ class botonSalir(ButtonBehavior,Image):
             self.source = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Copilot_20251117_003303.png"
 
 class OpcionPersonal(ButtonBehavior, Image):
-    def __init__(self, opcion,img_press, **kwargs):
+    def __init__(self, opcion,img_press,inf, **kwargs):
         super().__init__(**kwargs)
         self.opcion = opcion
         self.seleccionado = False
@@ -241,10 +278,18 @@ class OpcionPersonal(ButtonBehavior, Image):
         self.size_hint = (None,None)
         self.size = (100,100)
         self.img_press = img_press
+        self.inf = inf
  
     def on_touch_down(self,touch):
         if self.collide_point(*touch.pos):
-            self.state = 'down'
+            apps = App.get_running_app()
+            apps.contenedor.body.nueva_ventana.recursos_personal.fila.imagen.source = self.img
+            apps.contenedor.body.nueva_ventana.recursos_personal.fila.informacion.text = self.inf
+            if self.state=="normal":
+                self.state = 'down'
+
+            else: 
+                self.state = 'normal'
             self.on_press()
         
     def on_press(self):
@@ -255,18 +300,23 @@ class OpcionPersonal(ButtonBehavior, Image):
             self.source = self.img  # Imagen cuando no está seleccionado
 
 class ButtonGuardar(ButtonBehavior,Image):
-    def __init__(self,input_nombre,input_year,input_month,input_day,input_hora,input_min,input_sala):
+    def __init__(self,input_nombre,year_inicio,month_inicio,day_inicio,hora_inicio,min_inicio,input_sala,year_fin,month_fin,day_fin,hora_fin,min_fin):
         super().__init__()
         self.source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Copilot_20251117_003303.png"
         self.size_hint = (None,None)
         self.size = (190,80)
         self.pos = (510,120)
         self.input_nombre = input_nombre
-        self.input_year = input_year
-        self.input_month = input_month
-        self.input_day = input_day
-        self.input_hora = input_hora
-        self.input_min = input_min
+        self.year_inicio = year_inicio
+        self.year_fin = year_fin
+        self.month_inicio = month_inicio
+        self.month_fin = month_fin
+        self.day_inicio = day_inicio
+        self.day_fin = day_fin
+        self.hora_inicio = hora_inicio
+        self.hora_fin = hora_fin
+        self.min_inicio = min_inicio
+        self.min_fin = min_fin
         self.input_sala = input_sala
         
     def on_touch_down(self,touch):
@@ -278,19 +328,35 @@ class ButtonGuardar(ButtonBehavior,Image):
             try:
                 if self.input_nombre.text == "": raise Exception("Sin nombre")
                 if self.input_sala.text == "Seleccione una sala": raise Exception("Sin sala")
+                if len(evento.recursos_herramienta) == 0: raise Exception("Sin recursos herramienta")
+                if len(evento.recursos_persona) == 0: raise Exception("Sin recurso persona")
 
-                year = int(self.input_year.text)
-                month = int(self.input_month.text)
-                day = int(self.input_day.text)
-                hora = int(self.input_hora.text)
-                minu = int(self.input_min.text)
+                year = int(self.year_inicio.text)
+                month = int(self.month_inicio.text)
+                day = int(self.day_inicio.text)
+                hora = int(self.hora_inicio.text)
+                minu = int(self.min_inicio.text)
 
+                year_fin = int(self.year_fin.text)
+                month_fin = int(self.month_fin.text)
+                day_fin = int(self.day_fin.text)
+                hora_fin = int(self.hora_fin.text)
+                minu_fin = int(self.min_fin.text)
+
+                #Posibles errores de la fecha inicio
                 if 2025 > year or year > 2030: raise Exception("Ano incorrecto")
                 if 1 > month or month > 12: raise Exception("Mes incorrecto")
-                if 2025 > year or year > 2032: raise Exception("Ano incorrecto")
                 if 1 > day or day > calendar.monthrange(year, month)[1]: raise Exception("Dia incorrecto")
                 if 0 > hora or hora > 23: raise Exception("Hora incorrecta")
                 if 0 > minu or minu > 59: raise Exception("Minutos incorrectos")
+
+                #Posibles errores de la fecha fin
+                if 2025 > year_fin or year_fin > 2030: raise Exception("Ano incorrecto")
+                if year_fin < year: raise Exception("Ano fin menor que el inicial")
+                if 1 > month_fin or month_fin > 12: raise Exception("Mes fin incorrecto")
+                if 1 > day_fin or day_fin > calendar.monthrange(year_fin, month_fin)[1]: raise Exception("Dia fin incorrecto")
+                if 0 > hora_fin or hora_fin > 23: raise Exception("Hora fin incorrecta")
+                if 0 > minu_fin or minu_fin > 59: raise Exception("Minutos fin incorrectos")
 
             except Exception as e:
                 error = e.args[0] if type(e) != ValueError else "Fecha incorrecta!"
@@ -299,11 +365,13 @@ class ButtonGuardar(ButtonBehavior,Image):
             else:
                 nombre = self.input_nombre.text
                 fecha = datetime.datetime(year,month,day,hora,minu)
+                fecha_fin = datetime.datetime(year_fin,month_fin,day_fin,hora_fin,minu_fin)
                 evento.recursos_sala.append(self.input_sala.text)
                 recursos = evento.recursos_herramienta+evento.recursos_persona+evento.recursos_sala
                 
                 evento.datos["Nombre"] = nombre
-                evento.datos["Fecha"] = fecha
+                evento.datos["Fecha Inicio"] = fecha
+                evento.datos["Fecha Fin"] = fecha_fin
                 evento.datos["Recursos"] = recursos
 
 
@@ -315,7 +383,7 @@ class ButtonGuardar(ButtonBehavior,Image):
                 nombre = self.input_nombre.text
 
                 #Agregando la fecha del evento(Si alguno de los campos esta vacio dar error)
-                if self.input_year.text=="" or self.input_month.text=="" or self.input_day.text=="" or self.input_hora.text=="" or self.input_min.text== "":
+                if self.year_inicio.text=="" or self.input_month.text=="" or self.day_inicio.text=="" or self.input_hora.text=="" or self.input_min.text== "":
                     print("Deve completar todos los campos de la fecha")
                # elif type(self.input_year.text) != int or type(self.input_month.text) != int or type(self.input_day.text) != int or type(self.input_hora.text) != int or type(self.input_min.text) != int:
                 #    print("Entrada no valida")
@@ -373,68 +441,111 @@ class Agregar_Evento(FloatLayout):
         self.orientation = "horizontal"
 
         self.input_nombre = TextInput(
-            font_size = 19,
+            hint_text = "Nombre del evento",
+            font_size = 20,
             background_color = (0,0.3,0,0.4),
             size_hint = (None,None),
             size = (420,40),
-            pos_hint = {"center_x": 0.68,"center_y" : 0.78},
+            pos_hint = {"center_x": 0.68,"center_y" : 0.83},
         )
-        self.year_fecha = TextInput(
+        self.year_inicio = TextInput(
+            hint_text="year",
             size_hint = (None,None),
             background_color=(0,0.3,0,0.4),
-            size = (80,30),
+            size = (68,30),
             font_size = 16,
-            pos_hint = {"center_x": 0.48,"center_y" : 0.45},
+            pos_hint = {"center_x": 0.56,"center_y" : 0.55},
         )
-        self.month_fecha = TextInput(
+        self.year_fin = TextInput(
+            hint_text="year",
             size_hint = (None,None),
             background_color=(0,0.3,0,0.4),
-            size = (80,30),
+            size = (68,30),
             font_size = 16,
-            pos_hint = {"center_x": 0.60,"center_y" : 0.45},
+            pos_hint = {"center_x": 0.56,"center_y" : 0.43},
         )
-        self.dia_fecha = TextInput(
+        self.month_inicio = TextInput(
+            hint_text = 'month',
+            size_hint = (None,None),
+            background_color=(0,0.3,0,0.4),
+            size = (68,30),
+            font_size = 16,
+            pos_hint = {"center_x": 0.656,"center_y" : 0.55},
+        )
+        self.month_fin = TextInput(
+            hint_text = 'month',
+            size_hint = (None,None),
+            background_color=(0,0.3,0,0.4),
+            size = (68,30),
+            font_size = 16,
+            pos_hint = {"center_x": 0.656,"center_y" : 0.43},
+        )
+        self.day_inicio = TextInput(
+            hint_text = "day",
             size_hint = (None,None),
             cursor_color = (0,0,0,1),
             background_color=(0,0.3,0,0.4),
-            size = (80,30),
+            size = (68,30),
             font_size = 16,
-            pos_hint = {"center_x": 0.72,"center_y" : 0.45},
+            pos_hint = {"center_x": 0.75,"center_y" : 0.55},
         )
-        self.hora = TextInput(
+        self.day_fin = TextInput(
+            hint_text = "day",
+            size_hint = (None,None),
+            cursor_color = (0,0,0,1),
+            background_color=(0,0.3,0,0.4),
+            size = (68,30),
+            font_size = 16,
+            pos_hint = {"center_x": 0.75,"center_y" : 0.43},
+        )
+        self.hora_inicio = TextInput(
             font_size = 14,
             background_color = (0,0.3,0,0.4),
             size_hint = (None,None),
             size = (30,30),
-            pos_hint = {"center_x": 0.85,"center_y" : 0.45}
+            pos_hint = {"center_x": 0.85,"center_y" : 0.55}
         )
-        self.minutos = TextInput(
+        self.hora_fin = TextInput(
             font_size = 14,
             background_color = (0,0.3,0,0.4),
             size_hint = (None,None),
             size = (30,30),
-            pos_hint = {"center_x": 0.90,"center_y" : 0.45}
+            pos_hint = {"center_x": 0.85,"center_y" : 0.43}
         )
-        self.nombre = Label(
-            text = "Nombre del evento",
-            font_size = 20,
+        self.min_inicio = TextInput(
+            font_size = 14,
+            background_color = (0,0.3,0,0.4),
+            size_hint = (None,None),
+            size = (30,30),
+            pos_hint = {"center_x": 0.90,"center_y" : 0.55}
+        )
+        self.min_fin = TextInput(
+            font_size = 14,
+            background_color = (0,0.3,0,0.4),
+            size_hint = (None,None),
+            size = (30,30),
+            pos_hint = {"center_x": 0.90,"center_y" : 0.43}
+        )
+        self.text_inicio = Label(
+            text = " Inicio: ",
+            font_size = 21, 
             size_hint = (None,None),
             size = (50,20),
-            pos_hint = {"center_x": 0.7,"center_y" : 0.9}
+            pos_hint = {"center_x": 0.47,"center_y" : 0.552}
         )
-        self.fecha = Label(
-            text = "          Year        Month       Day",
-            font_size = 23,
+        self.text_fin = Label(
+            text = " Fin: ",
+            font_size = 21, 
             size_hint = (None,None),
             size = (50,20),
-            pos_hint = {"center_x": 0.55,"center_y" : 0.55}
+            pos_hint = {"center_x": 0.47,"center_y" : 0.432}
         )
         self.text_hora = Label(
             text = "Hora : Minutos",
             font_size = 15,
             size_hint = (None,None),
             size = (50,20),
-            pos_hint = {"center_x": 0.88,"center_y" : 0.54}
+            pos_hint = {"center_x": 0.88,"center_y" : 0.64}
         )
         self.selecc_sala = Spinner(
             text='Seleccione una sala',
@@ -448,22 +559,30 @@ class Agregar_Evento(FloatLayout):
             background_color = (0,0,0,0.2)
         )        
 
-        recursos_herramienta = BotonHerramientas()       
+        self.recursos_herramienta = BotonHerramientas()       
 
-        guardar = ButtonGuardar(
+        self.guardar = ButtonGuardar(
             input_nombre=self.input_nombre,
-            input_year=self.year_fecha,
-            input_month=self.month_fecha,
-            input_day=self.dia_fecha,
-            input_hora=self.hora,
-            input_min=self.minutos,
-            input_sala=self.selecc_sala)
+            year_inicio=self.year_inicio,
+            month_inicio=self.month_inicio,
+            day_inicio=self.day_inicio,
+            hora_inicio=self.hora_inicio,
+            min_inicio=self.min_inicio,
+            input_sala=self.selecc_sala,
+            year_fin=self.year_fin,
+            month_fin=self.month_fin,
+            day_fin=self.day_fin,
+            hora_fin=self.hora_fin,
+            min_fin=self.min_fin
 
-        buscar_hueco = ButtonBuscarHueco()
+            )
 
-        recursos_personal = BotonPersonal() 
 
-        text_recursos = Label(
+        self.buscar_hueco = ButtonBuscarHueco()
+
+        self.recursos_personal = BotonPersonal() 
+
+        self.text_recursos = Label(
             text = "Seleccione los recursos",
             font_size = 23,
             size_hint = (None,None),
@@ -471,20 +590,25 @@ class Agregar_Evento(FloatLayout):
             pos_hint = {"center_x": 0.6,"center_y" : 0.25}
         )
 
-        self.add_widget(buscar_hueco)
-        self.add_widget(guardar)
-        self.add_widget(recursos_herramienta)
-        self.add_widget(recursos_personal)
-        self.add_widget(text_recursos)
+        self.add_widget(self.buscar_hueco)
+        self.add_widget(self.guardar)
+        self.add_widget(self.recursos_herramienta)
+        self.add_widget(self.recursos_personal)
+        self.add_widget(self.text_recursos)
         self.add_widget(self.selecc_sala)
         self.add_widget(self.text_hora)
-        self.add_widget(self.minutos)
-        self.add_widget(self.hora)
-        self.add_widget(self.dia_fecha)
-        self.add_widget(self.month_fecha)
-        self.add_widget(self.year_fecha)
-        self.add_widget(self.fecha)
-        self.add_widget(self.nombre)
+        self.add_widget(self.min_inicio)
+        self.add_widget(self.hora_inicio)
+        self.add_widget(self.day_inicio)
+        self.add_widget(self.month_inicio)
+        self.add_widget(self.year_inicio)
+        self.add_widget(self.min_fin)
+        self.add_widget(self.hora_fin)
+        self.add_widget(self.day_fin)
+        self.add_widget(self.month_fin)
+        self.add_widget(self.year_fin)
+        self.add_widget(self.text_inicio)
+        self.add_widget(self.text_fin)
         self.add_widget(self.input_nombre)
         self.add_widget(Lbl())
 
@@ -572,13 +696,13 @@ class BoxL(BoxLayout):
         self.boxlayout_dinamico.clear_widgets()
 
         if boton == "Agregar evento":
-            nueva_ventana = Agregar_Evento()
+            self.nueva_ventana = Agregar_Evento()
         if boton == "Eventos importantes":
-            nueva_ventana = Eventos_Importantes()
+            self.nueva_ventana = Eventos_Importantes()
         if boton == "Ver eventos":
-            nueva_ventana = Ver_Eventos()
+            self.nueva_ventana = Ver_Eventos()
 
-        self.boxlayout_dinamico.add_widget(nueva_ventana)
+        self.boxlayout_dinamico.add_widget(self.nueva_ventana)
         
     def resaltar_boton_activo(self, boton_activo):
         """Resalta el botón activo y desresalta los demás"""
@@ -608,8 +732,7 @@ class Contenedor(FloatLayout):
 
 class Myapp(App):
     def build(self):
-        return Contenedor()
+        self.contenedor = Contenedor()
+        return self.contenedor
 
 Myapp().run()
-
-print(evento.nombre)
