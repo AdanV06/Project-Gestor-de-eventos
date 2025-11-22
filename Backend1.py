@@ -108,12 +108,6 @@ class Planificador:
             print("El evento se agrego correctamente")
         return True
 
-evento1 = Evento(
-    nombre = "Observacion 1",
-    inicio = datetime.datetime(2024,10,4,11,00),
-    fin = datetime.datetime(2024,10,4,12,00),
-    recursos = [("Operador del telescopio principal",25)]
-)
+
 
 operaciones = Planificador()
-operaciones.agregar_evento(evento1)

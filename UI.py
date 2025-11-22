@@ -16,42 +16,65 @@ import datetime
 import calendar
 from Estilo import kv
 from Imagenes import*
+from Backend1 import*
 
 Window.size = (1150,900)
 
 Builder.load_string(kv)
+
 
 class evento:
     recursos_persona = []
     recursos_herramienta = []
     recursos_sala = []
     datos = {}
+    cantidad = []
+
+'''
+class cant(TextInput):
+    def __init__(self):
+        super().__init__()
+
+        self.input_nombre = TextInput(
+            hint_text = "",
+            font_size = 20,
+            background_color = (0,0.3,0,0.4),
+            size_hint = (None,None),
+            size = (50,40),
+            pos_hint = {"center_x": 0.5,"center_y" : 0},
+        )
+'''
 
 class informacion(Label):
     def __init__(self,inf):
         super().__init__()
         self.markup=True
         self.text=inf
-        self.font_size = 20       
-        self.text_size=(460,110)
+        self.font_size = 16       
+        self.text_size=(460,170)
         self.size_hint=(None,None)
         self.valign='top'
         self.size=(480,202)
+
         #self.pos_hint = {"center_x": 0,"center_y":0.5}
 
 
 
 class informacion_personaje(BoxLayout):
-    def __init__(self,imagen,inf):
+    def __init__(self,imagen,inf,nombre):
         super().__init__()
-        self.imagen = Image(source=imagen,size_hint=(None,None),size=(180,180), pos_hint = {"center_x": 0,"center_y":0.5})
+        self.imagen = Image(source=imagen,size_hint=(None,None),size=(180,180), pos=(260,195))
         self.informacion = informacion(inf=inf)
         self.spacing = 2
+        self.nombre = nombre
+        print(self.nombre)
 
         self.espacio = filas(orientacion="horizontal",tamano=(30,0),espacio=2)
-
+        self.img = FloatLayout(size_hint=(None,None),size=(180,180),pos_hint={"center_x": 0.5,"center_y": 0.5})
+        self.img.add_widget(self.imagen)
+        
         self.add_widget(self.espacio)
-        self.add_widget(self.imagen)
+        self.add_widget(self.img)
         self.add_widget(self.informacion)
 
         
@@ -90,6 +113,7 @@ class BotonHerramientas(ButtonBehavior,Image):
         self.pos = (790,240)
         self.opciones_seleccionadas = []
 
+
     def on_touch_down(self,touch):
         if self.collide_point(*touch.pos):
             self.mostrar_herramintas(touch)
@@ -104,7 +128,7 @@ class BotonHerramientas(ButtonBehavior,Image):
         self.row4 =FloatLayout(size_hint=(None,None),size=(725,140),pos=self.pos)
 
         opciones = [("Polarimetro",objeto2,obj2),("Camara estelar",objeto3,obj3),("Espectrometro",objeto4,obj4),("Telescopio de Galaxias",objeto5,obj5),("Portatiles",objeto6,obj6),("Telescopio de agujeros negros",objeto7,obj7),("Gafas virtuales",objeto8,obj8),("Telescopio lunar",objeto9,obj9),
-        ("Telescopio de Rayos Gama",objeto10,obj10),("Telescopio solar",objeto11,obj11),("Radio Telescopio",objeto12,obj12),("Telescopio simple",objeto13,obj13)]
+        ("Telescopio de Rayos Gama",objeto10,obj10),("Telescopio solar",objeto11,obj11),("Radio Telescopio",objeto12,obj12),("Telescopio",objeto13,obj13)]
 
         self.all_opciones = []
         for opcion,img,info in opciones:
@@ -121,7 +145,7 @@ class BotonHerramientas(ButtonBehavior,Image):
             self.all_opciones.append(btn)
             self.grid.add_widget(btn)
 
-        self.fila = informacion_personaje(imagen=objeto1,inf="")
+        self.fila = informacion_personaje(imagen=objeto1,inf="",nombre="")
         
 
         self.boton_aceptar = botonAceptar(all_opciones=self.all_opciones,popup=self.popup_H,Id="Herramienta")
@@ -133,7 +157,7 @@ class BotonHerramientas(ButtonBehavior,Image):
         self.contenedor.add_widget(self.row4)
         self.menu_H.add_widget(self.contenedor)
 
-class OpcionHerramienta(ButtonBehavior, Image):
+class OpcionHerramienta(ButtonBehavior, Image,FloatLayout):
     def __init__(self, opcion,img_press,inf, **kwargs):
         super().__init__(**kwargs)
         self.opcion = opcion
@@ -149,12 +173,55 @@ class OpcionHerramienta(ButtonBehavior, Image):
             apps = App.get_running_app()
             apps.contenedor.body.nueva_ventana.recursos_herramienta.fila.imagen.source = self.img
             apps.contenedor.body.nueva_ventana.recursos_herramienta.fila.informacion.text = self.inf
+            apps.contenedor.body.nueva_ventana.recursos_herramienta.fila.nombre = self.opcion
+            print(apps.contenedor.body.nueva_ventana.recursos_herramienta.fila.nombre)
             if self.state=="normal":
                 self.state = 'down'
+                if self.opcion == "Gafas virtuales" or self.opcion == "Portatiles" or self.opcion == "Telescopio":
+                    self.contenedor_cant = vent_cant()
+                    self.cant = TextInput(size_hint=(None,None),size=(200,30),hint_text="Cantidad",cursor_color=(1,0,0,1),background_color=(0,0,0,0.4),font_size=17,pos_hint={"center_x":0.5,"top":1},foreground_color=(1,1,1,1))
+                    self.popup_cant = Popup(title=f"Diga cantidad de {self.opcion}",content=self.contenedor_cant,size_hint=(None,None),size=(250,150),background_color=(0.4,0,0.9,1))
+                    self.btn_aceptar = Button(size_hint=(None,None),size=(100,30),text="Aceptar",pos_hint={"center_x":0.50,"center_y":0.1},padding=(0,100),background_color=(0.6,0,1,0.7))
 
+                    self.btn_aceptar.bind(on_press=self.guardar)
+                    
+                    self.contenedor_cant.add_widget(self.cant)
+                    self.contenedor_cant.add_widget(self.btn_aceptar)
+                    
+
+                    self.popup_cant.open()
+                '''elif self.opcion == "Portatiles":
+                    self.contenedor_cant = vent_cant()
+                    self.cant = TextInput(size_hint=(None,None),size=(200,30),hint_text="Cantidad",cursor_color=(1,0,0,1),background_color=(0,0,0,0.4),font_size=17,pos_hint={"center_x":0.5,"top":1},foreground_color=(1,1,1,1))
+                    self.popup_cant = Popup(title=f"Diga cantidad de {self.opcion}",content=self.contenedor_cant,size_hint=(None,None),size=(250,150),background_color=(0.4,0,0.9,1))
+                    self.btn_aceptar = Button(size_hint=(None,None),size=(100,30),text="Aceptar",pos_hint={"center_x":0.50,"center_y":0.1},padding=(0,100),background_color=(0.6,0,1,0.7))
+
+                    self.contenedor_cant.add_widget(self.cant)
+                    self.contenedor_cant.add_widget(self.btn_aceptar)
+
+                    self.popup_cant.open()'''
+            
+        
             else: 
                 self.state = 'normal'
+                if self.opcion == 'Gafas virtuales':
+                    self.remove_widget(self.cant)
+
             self.on_press()
+    def guardar(self,instance):
+
+        try:
+            evento.cantidad.append(int(self.cant.text))
+
+        except Exception as e:
+            print("Cantidad incorrecta")
+
+        else:
+            print("Se agrego correctamete")
+            print(evento.cantidad)
+            self.popup_cant.dismiss()
+                
+
         
     def on_press(self):
         self.seleccionado = not self.seleccionado
@@ -163,6 +230,16 @@ class OpcionHerramienta(ButtonBehavior, Image):
         else:
             self.source = self.img  # Imagen cuando no está seleccionado
         
+class vent_cant(BoxLayout):
+    def __init__(self):
+        super().__init__()
+        self.size_hint=(None,None)
+        self.size=(220,85)
+        self.orientation="vertical"
+        self.spacing=20
+        
+
+
 class BotonPersonal(ButtonBehavior,Image):
         def __init__(self):
             super().__init__()
@@ -208,7 +285,7 @@ class BotonPersonal(ButtonBehavior,Image):
                 self.grid.add_widget(btn)
             
             #Informacion del recurso
-            self.fila = informacion_personaje(imagen=persona1,inf="")
+            self.fila = informacion_personaje(imagen=persona1,inf="",nombre="")
             
             
 
@@ -221,7 +298,7 @@ class BotonPersonal(ButtonBehavior,Image):
             self.contenedor.add_widget(self.fila)
             self.contenedor.add_widget(self.row4)
 
-            self.menu.add_widget(self.contenedor)\
+            self.menu.add_widget(self.contenedor)
     
 class botonAceptar(ButtonBehavior,Image):
     def __init__(self,all_opciones,popup,Id):
@@ -234,16 +311,26 @@ class botonAceptar(ButtonBehavior,Image):
         self.all_opciones = all_opciones
         self.Id = Id 
 
+
     def on_touch_down(self,touch):
         if self.collide_point(*touch.pos):
             self.source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Guardar_Touch.png"
             Clock.schedule_once(lambda dt: self.restaurar_color(touch), 0.15)
             if self.Id == "Persona":
                 evento.recursos_persona.clear()
-                evento.recursos_persona= [btn.opcion for btn in self.all_opciones if btn.state == 'down']
+        
+                evento.recursos_persona= [(btn.opcion,1) for btn in self.all_opciones if btn.state == 'down']
+
             if self.Id == "Herramienta":
+                i=len(evento.cantidad)#Guardando en i la cantidad de elementos de la lista
                 evento.recursos_herramienta.clear()
-                evento.recursos_herramienta = [btn.opcion for btn in self.all_opciones if btn.state == 'down']
+                evento.recursos_herramienta = [[btn.opcion] for btn in self.all_opciones if btn.state == 'down']
+                for n in evento.recursos_herramienta:
+                    if n[0]=="Portatiles" or n[0]=="Telescopio" or n[0]=="Gafas virtuales":
+                        n.append(evento.cantidad[i-1])#Agregando los elementos de la lista desde la ultima posicion a la primera
+                        i-=1#Restandole 1 para poder pasar al antecesor
+                    else:
+                        n.append(1)
             self.popup.dismiss()
             print(evento.recursos_herramienta)
             print(evento.recursos_persona)
@@ -269,7 +356,7 @@ class botonSalir(ButtonBehavior,Image):
     def restaurar_color(self,touch):
             self.source = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Copilot_20251117_003303.png"
 
-class OpcionPersonal(ButtonBehavior, Image):
+class OpcionPersonal(ButtonBehavior, Image, BoxLayout):
     def __init__(self, opcion,img_press,inf, **kwargs):
         super().__init__(**kwargs)
         self.opcion = opcion
@@ -318,6 +405,11 @@ class ButtonGuardar(ButtonBehavior,Image):
         self.min_inicio = min_inicio
         self.min_fin = min_fin
         self.input_sala = input_sala
+    def mostrar_error(self,error):
+        self.error = Label(text=error,size_hint=(None,None),size=(250,140),pos_hint={"center_x":0.3,"center_y":0},text_size=(200,140),valign='top')
+        self.popup_error = Popup(title='Error',content=self.error,size_hint=(None, None),size=(250, 140),background_color=(0.2,0,0.6,0.9))
+        self.popup_error.open()
+
         
     def on_touch_down(self,touch):
         if self.collide_point(*touch.pos):
@@ -326,10 +418,10 @@ class ButtonGuardar(ButtonBehavior,Image):
     
             #Agregando el nombre del evento:
             try:
-                if self.input_nombre.text == "": raise Exception("Sin nombre")
-                if self.input_sala.text == "Seleccione una sala": raise Exception("Sin sala")
-                if len(evento.recursos_herramienta) == 0: raise Exception("Sin recursos herramienta")
-                if len(evento.recursos_persona) == 0: raise Exception("Sin recurso persona")
+                if self.input_nombre.text == "": raise Exception("Debe darle un nombre al evento")
+                if self.input_sala.text == "Seleccione una sala": raise Exception("Debe seleccionar una sala")
+                if len(evento.recursos_herramienta) == 0: raise Exception("Debe seleccionar al menos 1 recurso herramienta")
+                if len(evento.recursos_persona) == 0: raise Exception("Debe seleccionar un cientifico para su evento")
 
                 year = int(self.year_inicio.text)
                 month = int(self.month_inicio.text)
@@ -344,66 +436,43 @@ class ButtonGuardar(ButtonBehavior,Image):
                 minu_fin = int(self.min_fin.text)
 
                 #Posibles errores de la fecha inicio
-                if 2025 > year or year > 2030: raise Exception("Ano incorrecto")
-                if 1 > month or month > 12: raise Exception("Mes incorrecto")
-                if 1 > day or day > calendar.monthrange(year, month)[1]: raise Exception("Dia incorrecto")
-                if 0 > hora or hora > 23: raise Exception("Hora incorrecta")
-                if 0 > minu or minu > 59: raise Exception("Minutos incorrectos")
+                if 2025 > year or year > 2040: raise Exception("El ano de inicio esta fuera del rango disponible")
+                if 1 > month or month > 12: raise Exception("EL mes del inicio del eveno es incorrecto")
+                if 1 > day or day > calendar.monthrange(year, month)[1]: raise Exception("El dia de inicio de su evento es incorrecto")
+                if 0 > hora or hora > 23: raise Exception("La hora del inicio de su evento es incorrecta")
+                if 0 > minu or minu > 59: raise Exception("La hora del inicio de su evento es incorrecta")
 
                 #Posibles errores de la fecha fin
-                if 2025 > year_fin or year_fin > 2030: raise Exception("Ano incorrecto")
-                if year_fin < year: raise Exception("Ano fin menor que el inicial")
-                if 1 > month_fin or month_fin > 12: raise Exception("Mes fin incorrecto")
-                if 1 > day_fin or day_fin > calendar.monthrange(year_fin, month_fin)[1]: raise Exception("Dia fin incorrecto")
-                if 0 > hora_fin or hora_fin > 23: raise Exception("Hora fin incorrecta")
-                if 0 > minu_fin or minu_fin > 59: raise Exception("Minutos fin incorrectos")
+                if 2025 > year_fin or year_fin > 2030: raise Exception("El ano del fin de su evento es incorrecto")
+                if year_fin < year: raise Exception("El ano del final es menor que el ano del inicio, por favor introduscalo correctamente")
+                if 1 > month_fin or month_fin > 12: raise Exception("El mes del fin de su evento es incorrecto")
+                if 1 > day_fin or day_fin > calendar.monthrange(year_fin, month_fin)[1]: raise Exception("El dia del fin del evento es incorrecto")
+                if 0 > hora_fin or hora_fin > 23: raise Exception("La hora del final de su evento es incorrecta")
+                if 0 > minu_fin or minu_fin > 59: raise Exception("La hora del final de su evento es incorrecta")
 
             except Exception as e:
-                error = e.args[0] if type(e) != ValueError else "Fecha incorrecta!"
-                print(error)
+                error = e.args[0] if type(e) != ValueError else "Su formato de fecha es incorrecto"
+                self.mostrar_error(error)
                 
-            else:
+            else:    
                 nombre = self.input_nombre.text
                 fecha = datetime.datetime(year,month,day,hora,minu)
                 fecha_fin = datetime.datetime(year_fin,month_fin,day_fin,hora_fin,minu_fin)
-                evento.recursos_sala.append(self.input_sala.text)
+                evento.recursos_sala.clear()
+                evento.recursos_sala.append((self.input_sala.text,1))
                 recursos = evento.recursos_herramienta+evento.recursos_persona+evento.recursos_sala
-                
-                evento.datos["Nombre"] = nombre
-                evento.datos["Fecha Inicio"] = fecha
-                evento.datos["Fecha Fin"] = fecha_fin
-                evento.datos["Recursos"] = recursos
 
+                print(recursos)
 
-            '''
+                event = Evento(
+                    nombre= nombre,
+                    inicio= fecha,
+                    fin= fecha_fin,
+                    recursos=recursos
+                )
 
-            if self.input_nombre.text == "":
-                print("Deve ponerle un nombre al evento")
-            else:
-                nombre = self.input_nombre.text
+                operaciones.agregar_evento(event)
 
-                #Agregando la fecha del evento(Si alguno de los campos esta vacio dar error)
-                if self.year_inicio.text=="" or self.input_month.text=="" or self.day_inicio.text=="" or self.input_hora.text=="" or self.input_min.text== "":
-                    print("Deve completar todos los campos de la fecha")
-               # elif type(self.input_year.text) != int or type(self.input_month.text) != int or type(self.input_day.text) != int or type(self.input_hora.text) != int or type(self.input_min.text) != int:
-                #    print("Entrada no valida")
-                else:
-                    fecha = self.input_year.text,self.input_month.text,self.input_day.text,self.input_hora.text,self.input_min.text
-
-                    if self.input_sala.text == 'Seleccione una sala':
-                        print("Debe seleccionar una sala")
-            #Agregar los recursos del evento
-            evento.recursos_sala.append(self.input_sala.text)
-            recursos = evento.recursos_herramienta+evento.recursos_persona+evento.recursos_sala
-
-            '''
-            #Guardando los datos en un diccionario:
-            '''evento.datos["Nombre"] = nombre
-            evento.datos["Fecha"] = fecha
-            evento.datos["Recursos"] = recursos'''
-
-            print(evento.datos)
-            
 
     def restaurar_color(self,touch):
             self.source = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Copilot_20251117_003303.png"
@@ -437,7 +506,6 @@ class OpcionPersonalizada(Button):
 class Agregar_Evento(FloatLayout):
     def __init__(self):
         super().__init__()
-
         self.orientation = "horizontal"
 
         self.input_nombre = TextInput(
@@ -549,7 +617,7 @@ class Agregar_Evento(FloatLayout):
         )
         self.selecc_sala = Spinner(
             text='Seleccione una sala',
-            values=["Planetario","Sala del telescopio principal","Cupula de fotografia","Sala de exposiciones","Cupulas de observacion"],
+            values=["Planetario","Cupula de observacion","Cupula de fotografia","Sala de exposiciones",],
             size_hint = (None,None),
             size = (260,35),
             font_size = 23,

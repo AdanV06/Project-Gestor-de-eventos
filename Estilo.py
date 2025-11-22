@@ -133,7 +133,6 @@ kv = '''
 <informacion_personaje>:
     size_hint: None,None 
     size: 700,210   
-    orientation: "horizontal"
 
     canvas.before:
         Color: 
@@ -149,7 +148,14 @@ kv = '''
         Rectangle:
             pos: self.pos
             size: self.size
-        
+
+<vent_cant>:
+    canvas.before:
+        Color:
+            rgba: 0,0,0,0
+        Rectangle:
+            pos:self.pos
+            size: self.size      
 
 
 '''
