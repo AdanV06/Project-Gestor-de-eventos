@@ -80,8 +80,8 @@ class Planificador:
             for rec in self.recursos:
                 if r[0]==rec.nombre:
                     if r[1] > rec.cantidad:
-                        print(f"No hay suficientes {r[0]}, solo hay {rec.cantidad} disponibles")
-                        return False
+                        
+                        return f"No contamos con esa cantidad de {r[0]}, solo contamos con {rec.cantidad}"
         disp= 1000000
         for r in evento.recursos:
             for e in self.eventos:
@@ -91,22 +91,19 @@ class Planificador:
                             for j in self.recursos:
                                 if j.nombre == r[0]:
                                     if j.cantidad == 1:
-                                        print(f"El recurso {j.nombre} no esta disponible en ese horario")
-                                        return False
+                                        return f"El recurso {j.nombre} no esta disponible en ese horario"
                                     else:disp = j.cantidad
                                      
                             
                             disp -= rec[1]
                             if disp < r[1]:
-                                print(f"No hay suficientes {r[0]} disponibles en ese horario, solo hay {disp} disponibles")
-                                return False
+                                return f"No hay suficientes {r[0]} disponibles en ese horario, solo hay {disp} disponibles"
 
         self.eventos.append(evento)
         lista_eventos = [e.convertir_dicc() for e in self.eventos]
         with open(self.json_eventos,"w") as eventos_json:
             eventos_json.write(json.dumps({"eventos" : lista_eventos}))
-            print("El evento se agrego correctamente")
-        return True
+        return "El evento se agrego correctamente"
 
 
 
