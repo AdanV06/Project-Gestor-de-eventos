@@ -12,7 +12,9 @@ from kivy.uix.spinner import Spinner
 from kivy.clock import Clock
 from kivy.uix.popup import Popup
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.scrollview import ScrollView
 import datetime
+import json
 import calendar
 from Estilo import kv
 from Imagenes import*
@@ -50,7 +52,7 @@ class informacion(Label):
         super().__init__()
         self.markup=True
         self.text=inf
-        self.font_size = 16       
+        self.font_size = 20       
         self.text_size=(460,170)
         self.size_hint=(None,None)
         self.valign='top'
@@ -256,7 +258,7 @@ class BotonPersonal(ButtonBehavior,Image):
         
         def mostrar_menu(self,touch):
             self.menu = menu()
-            self.popup = Popup(title='Mis Preferencias',content=self.menu,size_hint=(None, None),size=(750, 840),background_color=(0.2,0,0.6,0.9))
+            self.popup = Popup(title='Cientificos del centro',content=self.menu,size_hint=(None, None),size=(750, 840),background_color=(0.2,0,0.6,0.9))
             self.popup.open()
             self.opciones_seleccionadas = []
 
@@ -264,7 +266,7 @@ class BotonPersonal(ButtonBehavior,Image):
             self.contenedor = Contenedor_Recursos()
             self.row4 =FloatLayout(size_hint=(None,None),size=(725,140),pos=self.pos)
 
-            opciones = [("Carl Sagan",persona1,inf1),("Vera Rubin",persona2,inf2),("Henrietta Leavitt",persona3,inf3),("Edwin Huble",persona5,inf5),(6,persona6,inf6),("Roger Penrose",persona7,inf7),("Margaret Burbidge",persona8,inf8),("Hans Bethe",persona9,inf9),
+            opciones = [("Carl Sagan",persona1,inf1),("Vera Rubin",persona2,inf2),("Henrietta Leavitt",persona3,inf3),("Edwin Huble",persona5,inf5),("Claudia Aguilar",persona6,inf6),("Margaret Burbidge",persona8,inf8),("Hans Bethe",persona9,inf9),
             ("Neil Tyson",persona10,inf10),("Stiphen Hawking",persona11,inf11)]
 
             self.all_opciones = []
@@ -331,9 +333,10 @@ class botonAceptar(ButtonBehavior,Image):
                         i-=1#Restandole 1 para poder pasar al antecesor
                     else:
                         n.append(1)
-            self.popup.dismiss()
-            print(evento.recursos_herramienta)
             print(evento.recursos_persona)
+            self.popup.dismiss()
+
+
     
     def restaurar_color(self,touch):
             self.source = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Copilot_20251117_003303.png"
@@ -405,6 +408,8 @@ class ButtonGuardar(ButtonBehavior,Image):
         self.min_inicio = min_inicio
         self.min_fin = min_fin
         self.input_sala = input_sala
+
+        print(self.input_sala.text)
     def mostrar_error(self,error):
         self.error = Label(text=error,size_hint=(None,None),size=(250,140),pos_hint={"center_x":0.3,"center_y":0},text_size=(200,140),valign='top')
         self.popup_error = Popup(title='Error',content=self.error,size_hint=(None, None),size=(250, 140),background_color=(0.2,0,0.6,0.9))
@@ -450,19 +455,31 @@ class ButtonGuardar(ButtonBehavior,Image):
                 if 0 > hora_fin or hora_fin > 23: raise Exception("La hora del final de su evento es incorrecta")
                 if 0 > minu_fin or minu_fin > 59: raise Exception("La hora del final de su evento es incorrecta")
 
+                if self.input_sala.text == "Planetario" and not(("Claudia Aguilar",1) in evento.recursos_persona): raise Exception(f"En la sala Planetario debe estar la encargada de esta sala")
+
+                for n in evento.recursos_herramienta:
+                    if (n[0] == "Gafas virtuales" or n[0] == "Portatiles" or n[0] == "Telescopio") and not(self.input_sala.text == "Sala de conferencias" or self.input_sala.text == "Planetario"): raise Exception(f"El recurso {n[0]} solo puede ser usado en la sala de conferencias o en el planetario")
+                    if (n[0] == "Telescopio de agujeros negros") and not(("Stiphen Hawking",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser usado por especialistas de agujeros negros")
+                    if (n[0] == "Telescopio Lunar") and (("Margaret Burbidge",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser utilizado por especialistas en astros")
+                    if (n[0] == "Telescopio de Galaxias") and (("Vera Rubin",1) in evento.recursos_persona or ("Edwin Huble",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser utilizado por especialistas de galaxias")
+                    if (n[0] == "Telescopio Solar") and (("Hans Bethe",1) in evento.recursos_persona or ("Carl Sagan",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser utilizados por especialistas del sol")
+                    if (n[0] == "Polarimetro" or n[0] == "Espectrometro") and (("Henrietta Leavitt") in evento.recursos_persona): raise Exception(f"El {n[0]} es solo puede ser utilizado por Henrietta Leavitt")
+
             except Exception as e:
                 error = e.args[0] if type(e) != ValueError else "Su formato de fecha es incorrecto"
                 self.mostrar_error(error)
                 
-            else:    
+            else:
+                print(evento.recursos_herramienta)
+                print(evento.recursos_sala)
+
                 nombre = self.input_nombre.text
                 fecha = datetime.datetime(year,month,day,hora,minu)
                 fecha_fin = datetime.datetime(year_fin,month_fin,day_fin,hora_fin,minu_fin)
                 evento.recursos_sala.clear()
                 evento.recursos_sala.append((self.input_sala.text,1))
-                recursos = evento.recursos_herramienta+evento.recursos_persona+evento.recursos_sala
+                recursos = evento.recursos_sala+evento.recursos_herramienta+evento.recursos_persona
 
-                print(recursos)
 
                 event = Evento(
                     nombre= nombre,
@@ -471,7 +488,7 @@ class ButtonGuardar(ButtonBehavior,Image):
                     recursos=recursos
                 )
 
-                operaciones.agregar_evento(event)
+                self.mostrar_error(operaciones.agregar_evento(event))
 
 
     def restaurar_color(self,touch):
@@ -506,7 +523,7 @@ class OpcionPersonalizada(Button):
 class Agregar_Evento(FloatLayout):
     def __init__(self):
         super().__init__()
-        self.orientation = "horizontal"
+        #self.orientation = "horizontal"
 
         self.input_nombre = TextInput(
             hint_text = "Nombre del evento",
@@ -617,7 +634,7 @@ class Agregar_Evento(FloatLayout):
         )
         self.selecc_sala = Spinner(
             text='Seleccione una sala',
-            values=["Planetario","Cupula de observacion","Cupula de fotografia","Sala de exposiciones",],
+            values=["Planetario","Cupula de observacion","Cupula de fotografia","Sala de conferencias","Sala de optica"],
             size_hint = (None,None),
             size = (260,35),
             font_size = 23,
@@ -680,17 +697,6 @@ class Agregar_Evento(FloatLayout):
         self.add_widget(self.input_nombre)
         self.add_widget(Lbl())
 
-class Eventos_Importantes(BoxLayout):
-    def __init__(self):
-        super().__init__()
-
-        self.orientation = "vertical"
-        tex = Label(
-            text="Eventos Importantes",
-            font_size= 45,
-            markup=True,
-            halign="center")
-        self.add_widget(tex)
 
 class Lbl(BoxLayout):
      def __init__(self):
@@ -698,17 +704,61 @@ class Lbl(BoxLayout):
         self.imagen = Image(source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Sala Planetario.png",size_hint= (None,None), size=self.size)
         self.add_widget(self.imagen)
 
-class Ver_Eventos(BoxLayout):
+class Item_event(ButtonBehavior,BoxLayout):
+    def __init__(self,nombre,info,hora):
+        super().__init__()
+        self.orientation = "horizontal"
+        self.size_hint=(None,None)
+        self.size=(870,80)
+        self.pos = self.center
+        self.nombre = nombre
+        self.info = info
+        recursos = ""
+        self.hora = hora
+
+
+
+        for rec in self.info:
+            if rec[1] > 1:
+                recursos += f" {str(rec[0])} : {str(rec[1])},"
+            else:
+                recursos += f" {str(rec[0])},"
+
+        print(recursos)
+        informacion = Label(text=f"              Recursos:\n{recursos}",font_size=12,text_size=(280,60),pos_hint={"center_x":0,"center_y":0.7},color=(1,1,1,1))
+        inf_hora = Label(text=self.hora,color=(0,0,0,1),size_hint=(None,None),size=(220,80))
+        
+        self.add_widget(Label(text= self.nombre,font_size=20,text_size=(220,80),valign="center"))
+        self.add_widget(inf_hora)
+        self.add_widget(informacion)
+
+
+class cont_event(BoxLayout):
     def __init__(self):
         super().__init__()
+        self.orientation='vertical'
+        self.size_hint = (None,None)
+        self.bind(minimum_height=self.setter('height'))
+        self.spacing = 8
 
-        self.orientation = "vertical"
-        tex = Label(
-            text="Ver_eventos",
-            font_size= 60,
-            markup=True,
-            halign="center")
-        self.add_widget(tex)
+        eventos = leer_json(ruta_eventos)
+
+        for event in eventos.get("eventos"):
+            self.add_widget(Item_event(nombre=event["nombre"],info=event["recursos"],hora=f"{event["inicio"]} : {event["fin"]}"))
+ 
+
+
+class Ver_Eventos(FloatLayout):
+    def __init__(self):
+        super().__init__()
+        self.orientation='vertical'
+        self.lista_eventos = ScrollView(pos=(138,225))
+        self.contenedor_eventos = cont_event()
+        self.lista_eventos.add_widget(self.contenedor_eventos)
+        self.add_widget(self.lista_eventos)
+    
+
+
 
 class Texto(Label):
     def __init__(self):
@@ -730,14 +780,12 @@ class BoxButtons(BoxLayout):
         super().__init__()
 
         self.box_principal = box_principal
+
         self.add_eventos = Buttons("Agregar evento")
         self.add_eventos.contenido = "Agregar evento"
         self.add_eventos.bind(on_press=self.cambiar_ventana)
         self.add_widget(self.add_eventos)
-        self.important_eventos = Buttons("Eventos importantes")
-        self.important_eventos.contenido = "Eventos importantes"
-        self.important_eventos.bind(on_press=self.cambiar_ventana)
-        self.add_widget(self.important_eventos)
+
         self.ver_eventos = Buttons("Ver eventos")
         self.ver_eventos.contenido = "Ver eventos"
         self.ver_eventos.bind(on_press=self.cambiar_ventana)
@@ -765,8 +813,7 @@ class BoxL(BoxLayout):
 
         if boton == "Agregar evento":
             self.nueva_ventana = Agregar_Evento()
-        if boton == "Eventos importantes":
-            self.nueva_ventana = Eventos_Importantes()
+
         if boton == "Ver eventos":
             self.nueva_ventana = Ver_Eventos()
 
@@ -788,7 +835,7 @@ class BoxL(BoxLayout):
                 boton.background_color = color_inactivo
                 boton.color = (1, 1, 1, 1)  # Texto blanco
 
-        
+
 
 class Contenedor(FloatLayout):
     def __init__(self):
