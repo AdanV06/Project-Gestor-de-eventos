@@ -17,12 +17,15 @@ import datetime
 import json
 import calendar
 from Estilo import kv
+from Stile_vent_Agregar_Evento import kv2
 from Imagenes import*
 from Backend1 import*
+from Class_vent_Agregar_Evento import*
 
 Window.size = (1150,900)
 
 Builder.load_string(kv)
+Builder.load_string(kv2)
 
 
 class evento:
@@ -121,13 +124,13 @@ class BotonHerramientas(ButtonBehavior,Image):
             allow_stretch=True,
             source = img,
             state='down' if opcion in self.opciones_seleccionadas else 'normal',
-            img_press= "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Guardar_Touch.png",
+            img_press= "Imagenes/Recurso Seleccionado.png",
             inf = info
             )
             self.all_opciones.append(btn)
             self.grid.add_widget(btn)
 
-        self.fila = informacion_personaje(imagen=objeto1,inf="",nombre="")
+        self.fila = informacion_personaje(imagen="Imagenes/Recurso Seleccionado.png",inf="",nombre="")
         
 
         self.boton_aceptar = botonAceptar(all_opciones=self.all_opciones,popup=self.popup_H,Id="Herramienta")
@@ -259,7 +262,7 @@ class BotonPersonal(ButtonBehavior,Image):
                 allow_stretch=True,
                 source = img,
                 state='down' if opcion in self.opciones_seleccionadas else 'normal',
-                img_press = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Guardar_Touch.png",
+                img_press = "Imagenes/Persona Seleccionada.png",
                 inf=informacion
                 )
                 
@@ -267,7 +270,7 @@ class BotonPersonal(ButtonBehavior,Image):
                 self.grid.add_widget(btn)
             
             #Informacion del recurso
-            self.fila = informacion_personaje(imagen=persona1,inf="",nombre="")
+            self.fila = informacion_personaje(imagen="Imagenes/Persona Seleccionada.png",inf="",nombre="")
             
             
 
@@ -285,7 +288,7 @@ class BotonPersonal(ButtonBehavior,Image):
 class botonAceptar(ButtonBehavior,Image):
     def __init__(self,all_opciones,popup,Id):
         super().__init__()
-        self.source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Copilot_20251117_003303.png"
+        self.source="Imagenes/Aceptar.png"
         self.size_hint = (None,None)
         self.size = (250,90)
         self.pos = (270,60)
@@ -296,7 +299,7 @@ class botonAceptar(ButtonBehavior,Image):
 
     def on_touch_down(self,touch):
         if self.collide_point(*touch.pos):
-            self.source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Guardar_Touch.png"
+            self.source="Imagenes/Aceptar_pulsado.png"
             Clock.schedule_once(lambda dt: self.restaurar_color(touch), 0.15)
             if self.Id == "Persona":
                 evento.recursos_persona.clear()
@@ -319,12 +322,12 @@ class botonAceptar(ButtonBehavior,Image):
 
     
     def restaurar_color(self,touch):
-            self.source = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Copilot_20251117_003303.png"
+            self.source = "Imagenes/Aceptar.png"
 
 class botonSalir(ButtonBehavior,Image):
     def __init__(self,popup):
         super().__init__()
-        self.source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Copilot_20251117_003303.png"
+        self.source="Imagenes/Cancelar.png"
         self.size_hint = (None,None)
         self.size = (250,90)
         self.pos = (620,60)
@@ -332,12 +335,12 @@ class botonSalir(ButtonBehavior,Image):
 
     def on_touch_down(self,touch):
         if self.collide_point(*touch.pos):
-            self.source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Guardar_Touch.png"
+            self.source="Imagenes/Cancelar_pulsado.png"
             Clock.schedule_once(lambda dt: self.restaurar_color(touch), 0.15)
             self.popup.dismiss()
 
     def restaurar_color(self,touch):
-            self.source = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Copilot_20251117_003303.png"
+            self.source = "Imagenes/Cancelar.png"
 
 class OpcionPersonal(ButtonBehavior, Image, BoxLayout):
     def __init__(self, opcion,img_press,inf, **kwargs):
@@ -372,10 +375,6 @@ class OpcionPersonal(ButtonBehavior, Image, BoxLayout):
 class ButtonGuardar(ButtonBehavior,Image):
     def __init__(self,input_nombre,year_inicio,month_inicio,day_inicio,hora_inicio,min_inicio,input_sala,year_fin,month_fin,day_fin,hora_fin,min_fin):
         super().__init__()
-        self.source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Copilot_20251117_003303.png"
-        self.size_hint = (None,None)
-        self.size = (190,80)
-        self.pos = (510,120)
         self.input_nombre = input_nombre
         self.year_inicio = year_inicio
         self.year_fin = year_fin
@@ -389,7 +388,6 @@ class ButtonGuardar(ButtonBehavior,Image):
         self.min_fin = min_fin
         self.input_sala = input_sala
 
-        print(self.input_sala.text)
     def mostrar_error(self,error):
         self.mensaje = error
         self.error = Label(text=self.mensaje,size_hint=(None,None),size=(250,140),pos_hint={"center_x":0.3,"center_y":0},text_size=(200,140),valign='top')
@@ -422,19 +420,20 @@ class ButtonGuardar(ButtonBehavior,Image):
                 minu_fin = int(self.min_fin.text)
 
                 #Posibles errores de la fecha inicio
-                if 2025 > year or year > 2040: raise Exception("El ano de inicio esta fuera del rango disponible")
+                if year > 2040: raise Exception("El ano de inicio esta fuera del rango disponible")
                 if 1 > month or month > 12: raise Exception("EL mes del inicio del eveno es incorrecto")
                 if 1 > day or day > calendar.monthrange(year, month)[1]: raise Exception("El dia de inicio de su evento es incorrecto")
                 if 0 > hora or hora > 23: raise Exception("La hora del inicio de su evento es incorrecta")
                 if 0 > minu or minu > 59: raise Exception("La hora del inicio de su evento es incorrecta")
+                if datetime.datetime(year,month,day,hora,minu) < datetime.datetime.now(): raise Exception("La fecha de inicio es antes del momento actual")
 
                 #Posibles errores de la fecha fin
-                if 2025 > year_fin or year_fin > 2030: raise Exception("El ano del fin de su evento es incorrecto")
-                if year_fin < year: raise Exception("El ano del final es menor que el ano del inicio, por favor introduscalo correctamente")
+                if year_fin > 2030: raise Exception("El ano del fin de su evento es incorrecto")
                 if 1 > month_fin or month_fin > 12: raise Exception("El mes del fin de su evento es incorrecto")
                 if 1 > day_fin or day_fin > calendar.monthrange(year_fin, month_fin)[1]: raise Exception("El dia del fin del evento es incorrecto")
                 if 0 > hora_fin or hora_fin > 23: raise Exception("La hora del final de su evento es incorrecta")
                 if 0 > minu_fin or minu_fin > 59: raise Exception("La hora del final de su evento es incorrecta")
+                if datetime.datetime(year_fin,month_fin,day_fin,hora_fin,minu_fin) < datetime.datetime(year,month,day,hora,minu): raise Exception("La fecha fin es antes que la fecha de inicio")
 
                 if self.input_sala.text == "Planetario" and not(("Claudia Aguilar",1) in evento.recursos_persona): raise Exception(f"En la sala Planetario debe estar la encargada de esta sala")
 
@@ -444,7 +443,7 @@ class ButtonGuardar(ButtonBehavior,Image):
                     if (n[0] == "Telescopio Lunar") and not(("Margaret Burbidge",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser utilizado por especialistas de la luna")
                     if (n[0] == "Telescopio de Galaxias") and not(("Vera Rubin",1) in evento.recursos_persona or ("Edwin Huble",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser utilizado por especialistas de galaxias")
                     if (n[0] == "Telescopio Solar") and not(("Hans Bethe",1) in evento.recursos_persona or ("Carl Sagan",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser utilizados por especialistas del sol")
-                    if (n[0] == "Polarimetro" or n[0] == "Espectrometro") and not(("Henrietta Leavitt") in evento.recursos_persona): raise Exception(f"El {n[0]} es solo puede ser utilizado por Henrietta Leavitt")
+                    if (n[0] == "Polarimetro" or n[0] == "Espectrometro") and not(("Henrietta Leavitt",1) in evento.recursos_persona): raise Exception(f"El {n[0]} es solo puede ser utilizado por Henrietta Leavitt")
 
             except Exception as e:
                 error = e.args[0] if type(e) != ValueError else "Su formato de fecha es incorrecto"
@@ -481,14 +480,10 @@ class ButtonBuscarHueco(ButtonBehavior,Image):
         super().__init__()
         self.input_nombre = input_nombre
         self.input_sala = input_sala
-        self.source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Copilot_20251117_003304.png"
-        self.size_hint = (None,None)
-        self.size = (190,80)
-        self.pos = (770,120)
 
     def on_touch_down(self,touch):
         if self.collide_point(*touch.pos):
-            self.source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Buscar_hueco_Touch.png"
+            self.source="Imagenes/Buscar Horario_pulsado.png"
             Clock.schedule_once(lambda dt: self.restaurar_color(touch), 0.15)
             self.pedir_duracion(touch)
             
@@ -552,145 +547,28 @@ class ButtonBuscarHueco(ButtonBehavior,Image):
         self.popup_error.open()
 
     def restaurar_color(self,touch):    
-            self.source = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Copilot_20251117_003304.png"
-
-class OpcionPersonalizada(Button):
-    """Clase personalizada para las opciones del spinner"""
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.background_color = (0.4, 0.4, 0.9, 1)  # Color de fondo
-        self.color = (1, 1, 1, 1)  # Color del texto
-        self.size_hint_y = None
-        self.height = 40 # ALTURA de cada opción
-        self.font_size = '20sp'
-
+            self.source = "Imagenes/Buscar Horario.png"
             
-
-
-
 class Agregar_Evento(FloatLayout):
     def __init__(self):
         super().__init__()
         #self.orientation = "horizontal"
 
-        self.input_nombre = TextInput(
-            hint_text = "Nombre del evento",
-            font_size = 20,
-            background_color = (0,0.3,0,0.4),
-            size_hint = (None,None),
-            size = (420,40),
-            pos_hint = {"center_x": 0.68,"center_y" : 0.83},
-        )
-        self.year_inicio = TextInput(
-            hint_text="year",
-            size_hint = (None,None),
-            background_color=(0,0.3,0,0.4),
-            size = (68,30),
-            font_size = 16,
-            pos_hint = {"center_x": 0.56,"center_y" : 0.55},
-        )
-        self.year_fin = TextInput(
-            hint_text="year",
-            size_hint = (None,None),
-            background_color=(0,0.3,0,0.4),
-            size = (68,30),
-            font_size = 16,
-            pos_hint = {"center_x": 0.56,"center_y" : 0.43},
-        )
-        self.month_inicio = TextInput(
-            hint_text = 'month',
-            size_hint = (None,None),
-            background_color=(0,0.3,0,0.4),
-            size = (68,30),
-            font_size = 16,
-            pos_hint = {"center_x": 0.656,"center_y" : 0.55},
-        )
-        self.month_fin = TextInput(
-            hint_text = 'month',
-            size_hint = (None,None),
-            background_color=(0,0.3,0,0.4),
-            size = (68,30),
-            font_size = 16,
-            pos_hint = {"center_x": 0.656,"center_y" : 0.43},
-        )
-        self.day_inicio = TextInput(
-            hint_text = "day",
-            size_hint = (None,None),
-            cursor_color = (0,0,0,1),
-            background_color=(0,0.3,0,0.4),
-            size = (68,30),
-            font_size = 16,
-            pos_hint = {"center_x": 0.75,"center_y" : 0.55},
-        )
-        self.day_fin = TextInput(
-            hint_text = "day",
-            size_hint = (None,None),
-            cursor_color = (0,0,0,1),
-            background_color=(0,0.3,0,0.4),
-            size = (68,30),
-            font_size = 16,
-            pos_hint = {"center_x": 0.75,"center_y" : 0.43},
-        )
-        self.hora_inicio = TextInput(
-            font_size = 14,
-            background_color = (0,0.3,0,0.4),
-            size_hint = (None,None),
-            size = (30,30),
-            pos_hint = {"center_x": 0.85,"center_y" : 0.55}
-        )
-        self.hora_fin = TextInput(
-            font_size = 14,
-            background_color = (0,0.3,0,0.4),
-            size_hint = (None,None),
-            size = (30,30),
-            pos_hint = {"center_x": 0.85,"center_y" : 0.43}
-        )
-        self.min_inicio = TextInput(
-            font_size = 14,
-            background_color = (0,0.3,0,0.4),
-            size_hint = (None,None),
-            size = (30,30),
-            pos_hint = {"center_x": 0.90,"center_y" : 0.55}
-        )
-        self.min_fin = TextInput(
-            font_size = 14,
-            background_color = (0,0.3,0,0.4),
-            size_hint = (None,None),
-            size = (30,30),
-            pos_hint = {"center_x": 0.90,"center_y" : 0.43}
-        )
-        self.text_inicio = Label(
-            text = " Inicio: ",
-            font_size = 21, 
-            size_hint = (None,None),
-            size = (50,20),
-            pos_hint = {"center_x": 0.47,"center_y" : 0.552}
-        )
-        self.text_fin = Label(
-            text = " Fin: ",
-            font_size = 21, 
-            size_hint = (None,None),
-            size = (50,20),
-            pos_hint = {"center_x": 0.47,"center_y" : 0.432}
-        )
-        self.text_hora = Label(
-            text = "Hora : Minutos",
-            font_size = 15,
-            size_hint = (None,None),
-            size = (50,20),
-            pos_hint = {"center_x": 0.88,"center_y" : 0.64}
-        )
-        self.selecc_sala = Spinner(
-            text='Seleccione una sala',
-            values=["Planetario","Cupula de observacion","Cupula de fotografia","Sala de conferencias","Sala de optica"],
-            size_hint = (None,None),
-            size = (260,35),
-            font_size = 23,
-            background_normal = "",
-            option_cls=OpcionPersonalizada,
-            pos_hint = {"center_x": 0.21,"center_y" : 0.8},
-            background_color = (0,0,0,0.2),
-        )
+        self.input_nombre = Input_Name()
+        self.year_inicio = Year_inicio()
+        self.year_fin = Year_fin()
+        self.month_inicio = Month_inicio()
+        self.month_fin = Month_fin()
+        self.day_inicio = Day_inicio()
+        self.day_fin = Day_fin()
+        self.hora_inicio = Hora_inicio()
+        self.hora_fin = Hora_fin()
+        self.min_inicio = Min_inicio()
+        self.min_fin = Min_fin()
+        self.text_inicio = Text_inicio()
+        self.text_fin = Text_fin()
+        self.text_hora = Text_hora()
+        self.selecc_sala = Sala_selec()
         self.selecc_sala.bind(text=self.cambiar_imagen_lbl)
 
         self.recursos_herramienta = BotonHerramientas()       
@@ -716,13 +594,7 @@ class Agregar_Evento(FloatLayout):
 
         self.recursos_personal = BotonPersonal() 
 
-        self.text_recursos = Label(
-            text = "Seleccione los recursos",
-            font_size = 23,
-            size_hint = (None,None),
-            size = (100,30),
-            pos_hint = {"center_x": 0.6,"center_y" : 0.25}
-        )
+        self.text_recursos = Text_recursos()
 
         self.add_widget(self.buscar_hueco)
         self.add_widget(self.guardar)
@@ -748,13 +620,12 @@ class Agregar_Evento(FloatLayout):
         self.add_widget(self.Lbl)
         
     def cambiar_imagen_lbl(win, ins, seleccion):
-        print("Eeeeeeeeeeeeeeeeeeeeeee")
         rutas = {
-            "Planetario": "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Sala Planetario.png",
-            "Cupula de observacion": "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Cupula de Observacion.png",
-            "Cupula de fotografia": "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Sala Telescopio Principal.png",
-            "Sala de conferencias": "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Sala de conferencias.png",
-            "Sala de optica": "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Sala de Optica.png"
+            "Planetario": "Imagenes/Sala Planetario.png",
+            "Cupula de observacion": "Imagenes/Cupula de Observacion.png",
+            "Cupula de fotografia": "Imagenes/Sala Telescopio Principal.png",
+            "Sala de conferencias": "Imagenes/Sala de conferencias.png",
+            "Sala de optica": "Imagenes/Sala de Optica.png"
         }    
         print(rutas[seleccion])
         win.Lbl.actualizar_imagen(rutas[seleccion])
