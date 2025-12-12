@@ -23,7 +23,7 @@ kv = '''
 
 <BoxButtons>:
     size_hint: None,None
-    size: 800,50
+    size: 900,50
 
 
     canvas.before:
@@ -48,7 +48,7 @@ kv = '''
     
 <Titulo>:
     size_hint: None,None
-    size: 800,60
+    size: 900,60
 
 
     canvas.before:
@@ -157,5 +157,21 @@ kv = '''
             pos:self.pos
             size: self.size      
 
+<cont_event>:
+    canvas.before:
+        Color:
+            rgba: 1,0,0,0
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<Item_event>:
+    canvas.before:
+        Color:
+            rgba: 0.3,0,0.8,0.7
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            
 
 '''

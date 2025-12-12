@@ -32,20 +32,6 @@ class evento:
     datos = {}
     cantidad = []
 
-'''
-class cant(TextInput):
-    def __init__(self):
-        super().__init__()
-
-        self.input_nombre = TextInput(
-            hint_text = "",
-            font_size = 20,
-            background_color = (0,0.3,0,0.4),
-            size_hint = (None,None),
-            size = (50,40),
-            pos_hint = {"center_x": 0.5,"center_y" : 0},
-        )
-'''
 
 class informacion(Label):
     def __init__(self,inf):
@@ -57,10 +43,6 @@ class informacion(Label):
         self.size_hint=(None,None)
         self.valign='top'
         self.size=(480,202)
-
-        #self.pos_hint = {"center_x": 0,"center_y":0.5}
-
-
 
 class informacion_personaje(BoxLayout):
     def __init__(self,imagen,inf,nombre):
@@ -78,8 +60,6 @@ class informacion_personaje(BoxLayout):
         self.add_widget(self.espacio)
         self.add_widget(self.img)
         self.add_widget(self.informacion)
-
-        
 
 class nombres(Label):
     def __init__(self,texto):
@@ -411,7 +391,8 @@ class ButtonGuardar(ButtonBehavior,Image):
 
         print(self.input_sala.text)
     def mostrar_error(self,error):
-        self.error = Label(text=error,size_hint=(None,None),size=(250,140),pos_hint={"center_x":0.3,"center_y":0},text_size=(200,140),valign='top')
+        self.mensaje = error
+        self.error = Label(text=self.mensaje,size_hint=(None,None),size=(250,140),pos_hint={"center_x":0.3,"center_y":0},text_size=(200,140),valign='top')
         self.popup_error = Popup(title='Error',content=self.error,size_hint=(None, None),size=(250, 140),background_color=(0.2,0,0.6,0.9))
         self.popup_error.open()
 
@@ -420,7 +401,7 @@ class ButtonGuardar(ButtonBehavior,Image):
         if self.collide_point(*touch.pos):
             self.source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Guardar_Touch.png"
             Clock.schedule_once(lambda dt: self.restaurar_color(touch), 0.15)
-    
+        
             #Agregando el nombre del evento:
             try:
                 if self.input_nombre.text == "": raise Exception("Debe darle un nombre al evento")
@@ -460,18 +441,18 @@ class ButtonGuardar(ButtonBehavior,Image):
                 for n in evento.recursos_herramienta:
                     if (n[0] == "Gafas virtuales" or n[0] == "Portatiles" or n[0] == "Telescopio") and not(self.input_sala.text == "Sala de conferencias" or self.input_sala.text == "Planetario"): raise Exception(f"El recurso {n[0]} solo puede ser usado en la sala de conferencias o en el planetario")
                     if (n[0] == "Telescopio de agujeros negros") and not(("Stiphen Hawking",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser usado por especialistas de agujeros negros")
-                    if (n[0] == "Telescopio Lunar") and (("Margaret Burbidge",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser utilizado por especialistas en astros")
-                    if (n[0] == "Telescopio de Galaxias") and (("Vera Rubin",1) in evento.recursos_persona or ("Edwin Huble",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser utilizado por especialistas de galaxias")
-                    if (n[0] == "Telescopio Solar") and (("Hans Bethe",1) in evento.recursos_persona or ("Carl Sagan",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser utilizados por especialistas del sol")
-                    if (n[0] == "Polarimetro" or n[0] == "Espectrometro") and (("Henrietta Leavitt") in evento.recursos_persona): raise Exception(f"El {n[0]} es solo puede ser utilizado por Henrietta Leavitt")
+                    if (n[0] == "Telescopio Lunar") and not(("Margaret Burbidge",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser utilizado por especialistas de la luna")
+                    if (n[0] == "Telescopio de Galaxias") and not(("Vera Rubin",1) in evento.recursos_persona or ("Edwin Huble",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser utilizado por especialistas de galaxias")
+                    if (n[0] == "Telescopio Solar") and not(("Hans Bethe",1) in evento.recursos_persona or ("Carl Sagan",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser utilizados por especialistas del sol")
+                    if (n[0] == "Polarimetro" or n[0] == "Espectrometro") and not(("Henrietta Leavitt") in evento.recursos_persona): raise Exception(f"El {n[0]} es solo puede ser utilizado por Henrietta Leavitt")
 
             except Exception as e:
                 error = e.args[0] if type(e) != ValueError else "Su formato de fecha es incorrecto"
                 self.mostrar_error(error)
                 
             else:
-                print(evento.recursos_herramienta)
-                print(evento.recursos_sala)
+                print(f"Recursos herramienta: {evento.recursos_herramienta}")
+                print(f"Recursos sala: {evento.recursos_sala}")
 
                 nombre = self.input_nombre.text
                 fecha = datetime.datetime(year,month,day,hora,minu)
@@ -480,6 +461,7 @@ class ButtonGuardar(ButtonBehavior,Image):
                 evento.recursos_sala.append((self.input_sala.text,1))
                 recursos = evento.recursos_sala+evento.recursos_herramienta+evento.recursos_persona
 
+                print(recursos)
 
                 event = Evento(
                     nombre= nombre,
@@ -495,8 +477,10 @@ class ButtonGuardar(ButtonBehavior,Image):
             self.source = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Copilot_20251117_003303.png"
 
 class ButtonBuscarHueco(ButtonBehavior,Image):
-    def __init__(self):
+    def __init__(self,input_nombre,input_sala):
         super().__init__()
+        self.input_nombre = input_nombre
+        self.input_sala = input_sala
         self.source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Copilot_20251117_003304.png"
         self.size_hint = (None,None)
         self.size = (190,80)
@@ -506,8 +490,68 @@ class ButtonBuscarHueco(ButtonBehavior,Image):
         if self.collide_point(*touch.pos):
             self.source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Buscar_hueco_Touch.png"
             Clock.schedule_once(lambda dt: self.restaurar_color(touch), 0.15)
+            self.pedir_duracion(touch)
+            
+            
+    def pedir_duracion(self,touch):
+        self.contenedor = vent_cant()
+        self.horas = TextInput(size_hint=(None,None),size=(70,30),hint_text="Horas",cursor_color=(1,0,0,1),background_color=(1,0,0,0.4),font_size=17,pos_hint={"center_x":0.5,"top":0.9},foreground_color=(1,1,1,1))
+        self.popup = Popup(title='Diga cuantas horas dura el evento',content=self.contenedor,size_hint=(None, None),size=(250, 140),background_color=(0.2,0,0.6,0.9))
+        self.btn_aceptar = Button(size_hint=(None,None),size=(100,30),text="Aceptar",pos_hint={"center_x":0.50,"center_y":0.1},padding=(0,100),background_color=(0.6,0,1,0.7))
+        
+        self.contenedor.add_widget(self.horas)
+        self.contenedor.add_widget(self.btn_aceptar)
 
-    def restaurar_color(self,touch):
+        self.btn_aceptar.bind(on_press=self.buscar)
+
+        self.popup.open()
+    
+    def buscar(self,instance):
+        try:
+            inicio = datetime.datetime.now()
+            fin = inicio + datetime.timedelta(hours=int(self.horas.text))
+            if self.input_nombre.text == "": raise Exception("Debe darle un nombre al evento")
+            if self.input_sala.text == "Seleccione una sala": raise Exception("Debe seleccionar una sala")
+            if len(evento.recursos_herramienta) == 0: raise Exception("Debe seleccionar al menos 1 recurso herramienta")
+            if len(evento.recursos_persona) == 0: raise Exception("Debe seleccionar un cientifico para su evento")
+
+            if self.input_sala.text == "Planetario" and not(("Claudia Aguilar",1) in evento.recursos_persona): raise Exception(f"En la sala Planetario debe estar la encargada de esta sala")
+
+            for n in evento.recursos_herramienta:
+                if (n[0] == "Gafas virtuales" or n[0] == "Portatiles" or n[0] == "Telescopio") and not(self.input_sala.text == "Sala de conferencias" or self.input_sala.text == "Planetario"): raise Exception(f"El recurso {n[0]} solo puede ser usado en la sala de conferencias o en el planetario")
+                if (n[0] == "Telescopio de agujeros negros") and not(("Stiphen Hawking",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser usado por especialistas de agujeros negros")
+                if (n[0] == "Telescopio Lunar") and not(("Margaret Burbidge",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser utilizado por especialistas en astros")
+                if (n[0] == "Telescopio de Galaxias") and not(("Vera Rubin",1) in evento.recursos_persona or ("Edwin Huble",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser utilizado por especialistas de galaxias")
+                if (n[0] == "Telescopio solar") and not(("Hans Bethe",1) in evento.recursos_persona or ("Carl Sagan",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser utilizados por especialistas del sol")
+                if (n[0] == "Polarimetro" or n[0] == "Espectrometro") and not(("Henrietta Leavitt") in evento.recursos_persona): raise Exception(f"El {n[0]} es solo puede ser utilizado por Henrietta Leavitt")
+
+        except Exception as e:
+            error = e.args[0] if type(e) != ValueError else "El formato de la duracion es incorrecto"
+            self.mostrar_error(error)
+        
+        else:
+            nombre = self.input_nombre.text
+            fecha = inicio
+            fecha_fin = fin
+            evento.recursos_sala.clear()
+            evento.recursos_sala.append((self.input_sala.text,1))
+            recursos = evento.recursos_sala+evento.recursos_herramienta+evento.recursos_persona
+    
+            event = Evento(
+                nombre=nombre,
+                inicio=fecha,
+                fin=fecha_fin,
+                recursos=recursos
+            )
+            self.mostrar_error(operaciones.buscar(event,int(self.horas.text)))
+            
+
+    def mostrar_error(self,error):
+        self.error = Label(text=error,size_hint=(None,None),size=(250,140),pos_hint={"center_x":0.3,"center_y":0},text_size=(200,140),valign='top')
+        self.popup_error = Popup(title='Error',content=self.error,size_hint=(None, None),size=(250, 140),background_color=(0.2,0,0.6,0.9))
+        self.popup_error.open()
+
+    def restaurar_color(self,touch):    
             self.source = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Copilot_20251117_003304.png"
 
 class OpcionPersonalizada(Button):
@@ -519,6 +563,10 @@ class OpcionPersonalizada(Button):
         self.size_hint_y = None
         self.height = 40 # ALTURA de cada opción
         self.font_size = '20sp'
+
+            
+
+
 
 class Agregar_Evento(FloatLayout):
     def __init__(self):
@@ -641,8 +689,9 @@ class Agregar_Evento(FloatLayout):
             background_normal = "",
             option_cls=OpcionPersonalizada,
             pos_hint = {"center_x": 0.21,"center_y" : 0.8},
-            background_color = (0,0,0,0.2)
-        )        
+            background_color = (0,0,0,0.2),
+        )
+        self.selecc_sala.bind(text=self.cambiar_imagen_lbl)
 
         self.recursos_herramienta = BotonHerramientas()       
 
@@ -663,7 +712,7 @@ class Agregar_Evento(FloatLayout):
             )
 
 
-        self.buscar_hueco = ButtonBuscarHueco()
+        self.buscar_hueco = ButtonBuscarHueco(input_nombre=self.input_nombre,input_sala=self.selecc_sala,)
 
         self.recursos_personal = BotonPersonal() 
 
@@ -695,14 +744,44 @@ class Agregar_Evento(FloatLayout):
         self.add_widget(self.text_inicio)
         self.add_widget(self.text_fin)
         self.add_widget(self.input_nombre)
-        self.add_widget(Lbl())
+        self.Lbl=Lbl()
+        self.add_widget(self.Lbl)
+        
+    def cambiar_imagen_lbl(win, ins, seleccion):
+        print("Eeeeeeeeeeeeeeeeeeeeeee")
+        rutas = {
+            "Planetario": "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Sala Planetario.png",
+            "Cupula de observacion": "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Cupula de Observacion.png",
+            "Cupula de fotografia": "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Sala Telescopio Principal.png",
+            "Sala de conferencias": "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Sala de conferencias.png",
+            "Sala de optica": "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Sala de Optica.png"
+        }    
+        print(rutas[seleccion])
+        win.Lbl.actualizar_imagen(rutas[seleccion])
 
 
-class Lbl(BoxLayout):
-     def __init__(self):
+'''class Lbl(BoxLayout):
+    def __init__(self,):
         super().__init__()
         self.imagen = Image(source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Sala Planetario.png",size_hint= (None,None), size=self.size)
-        self.add_widget(self.imagen)
+        self.add_widget(self.imagen)'''
+
+class Lbl(BoxLayout):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # Solo un widget de imagen que se actualiza
+        self.imagen_widget = Image(
+            source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Sala Planetario.png",
+            size_hint=(None, None),
+            size=self.size
+        )
+        self.add_widget(self.imagen_widget)
+    
+    def actualizar_imagen(self, nueva_ruta):
+        print("Aaaaaaaaaaaaaaaaaaa")
+        """Solo actualiza la fuente de la imagen existente"""
+        self.imagen_widget.source = nueva_ruta
+        self.imagen_widget.reload()  # Forzar recarga
 
 class Item_event(ButtonBehavior,BoxLayout):
     def __init__(self,nombre,info,hora):
@@ -724,7 +803,6 @@ class Item_event(ButtonBehavior,BoxLayout):
             else:
                 recursos += f" {str(rec[0])},"
 
-        print(recursos)
         informacion = Label(text=f"              Recursos:\n{recursos}",font_size=12,text_size=(280,60),pos_hint={"center_x":0,"center_y":0.7},color=(1,1,1,1))
         inf_hora = Label(text=self.hora,color=(0,0,0,1),size_hint=(None,None),size=(220,80))
         
@@ -840,7 +918,7 @@ class BoxL(BoxLayout):
 class Contenedor(FloatLayout):
     def __init__(self):
         super().__init__()
-        self.background = Image(source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Copilot_20251116_014842.png")
+        self.background = Image(source="Imagenes/Copilot_20251116_014842.png")
         self.add_widget(self.background)
         self.body = BoxL()
         self.add_widget(self.body)

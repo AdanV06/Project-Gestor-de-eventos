@@ -19,7 +19,7 @@
         "cantidad": 1
     },
         {
-        "nombre": "Telescopio de galaxias",
+        "nombre": "Telescopio de Galaxias",
         "tipo": "Herramienta",
         "disponibilidad": true,
         "cantidad": 1
@@ -28,7 +28,7 @@
         "nombre": "Portatiles",
         "tipo": "Herramienta",
         "disponibilidad": true,
-        "cantidad": 1
+        "cantidad": 20
     },
         {
         "nombre": "Telescopio de agujeros negros",
@@ -40,7 +40,7 @@
         "nombre": "Gafas virtuales",
         "tipo": "Herramienta",
         "disponibilidad": true,
-        "cantidad": 1
+        "cantidad": 20
     },
         {
         "nombre": "Telescopio Lunar",
@@ -55,7 +55,7 @@
         "cantidad": 1
     },
         {
-        "nombre": "Telescopio Solar",
+        "nombre": "Telescopio solar",
         "tipo": "Herramienta",
         "disponibilidad": true,
         "cantidad": 1
@@ -67,10 +67,10 @@
         "cantidad": 1
     },
         {
-        "nombre": "Telescopio Simple",
+        "nombre": "Telescopio",
         "tipo": "Herramienta",
         "disponibilidad": true,
-        "cantidad": 1
+        "cantidad": 20
     },
     {
         "nombre": "Planetario",
@@ -79,7 +79,7 @@
         "cantidad": 1
     },
     {
-        "nombre": "Sala del telescopio",
+        "nombre": "Sala de optica",
         "tipo": "sala",
         "disponibilidad": true,
         "cantidad": 1
@@ -92,13 +92,13 @@
     },
     {
         "nombre": "Sala de conferencias", 
-        "tipo": "personal",
+        "tipo": "sala",
         "disponibilidad": true,
         "cantidad": 1
     },
     {
         "nombre": "Cupula de observacion", 
-        "tipo": "personal",
+        "tipo": "sala",
         "disponibilidad": true,
         "cantidad": 1
     },
@@ -115,13 +115,7 @@
         "cantidad": 1
     },
     {
-        "nombre": "No c", 
-        "tipo": "personal",
-        "disponibilidad": true,
-        "cantidad": 1
-    },
-    {
-        "nombre": "Roger Penrose",
+        "nombre": "Claudia Aguilar", 
         "tipo": "personal",
         "disponibilidad": true,
         "cantidad": 1
@@ -146,6 +140,18 @@
     },
     {
         "nombre": "Stiphen Hawking",
+        "tipo": "personal",
+        "disponibilidad": true,
+        "cantidad": 1
+    },
+    {
+        "nombre": "Carl Sagan",
+        "tipo": "personal",
+        "disponibilidad": true,
+        "cantidad": 1
+    },
+    {
+        "nombre": "Vera Rubin",
         "tipo": "personal",
         "disponibilidad": true,
         "cantidad": 1
