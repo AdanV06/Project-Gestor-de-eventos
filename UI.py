@@ -16,17 +16,22 @@ from kivy.uix.scrollview import ScrollView
 import datetime
 import json
 import calendar
-from Estilo import kv
+from Stile_principal import kv
 from Stile_vent_Agregar_Evento import kv2
 from Imagenes import*
 from Backend1 import*
 from Class_vent_Agregar_Evento import*
+from Class_Vent_Recursos import*
+from Stile_Vent_Recursos import*
+from Class_Vent_Ver_Eventos import*
+from Stile_Vent_Ver_Eventos import*
 
 Window.size = (1150,900)
 
 Builder.load_string(kv)
 Builder.load_string(kv2)
-
+Builder.load_string(kv3)
+Builder.load_string(kv4)
 
 class evento:
     recursos_persona = []
@@ -36,68 +41,10 @@ class evento:
     cantidad = []
 
 
-class informacion(Label):
-    def __init__(self,inf):
-        super().__init__()
-        self.markup=True
-        self.text=inf
-        self.font_size = 20       
-        self.text_size=(460,170)
-        self.size_hint=(None,None)
-        self.valign='top'
-        self.size=(480,202)
-
-class informacion_personaje(BoxLayout):
-    def __init__(self,imagen,inf,nombre):
-        super().__init__()
-        self.imagen = Image(source=imagen,size_hint=(None,None),size=(180,180), pos=(260,195))
-        self.informacion = informacion(inf=inf)
-        self.spacing = 2
-        self.nombre = nombre
-        print(self.nombre)
-
-        self.espacio = filas(orientacion="horizontal",tamano=(30,0),espacio=2)
-        self.img = FloatLayout(size_hint=(None,None),size=(180,180),pos_hint={"center_x": 0.5,"center_y": 0.5})
-        self.img.add_widget(self.imagen)
-        
-        self.add_widget(self.espacio)
-        self.add_widget(self.img)
-        self.add_widget(self.informacion)
-
-class nombres(Label):
-    def __init__(self,texto):
-        super().__init__()
-        self.text = texto
-
-class TiposPersonal(Label):
-     def __init__(self,texto):
-        super().__init__()
-        self.text = texto
-
-class Contenedor_Recursos(BoxLayout):
-    def __init__(self):
-        super().__init__()
-
-class filas(BoxLayout):
-    def __init__(self,orientacion,tamano,espacio):
-        super().__init__()
-        self.orientation = orientacion
-        self.size = tamano
-        self.spacing = espacio
-
-class menu(BoxLayout):
-    def __init__(self):
-        super().__init__()
-
 class BotonHerramientas(ButtonBehavior,Image):
     def __init__(self):
         super().__init__()
-        self.source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Boton_Recurso.png"
-        self.size_hint = (None,None)
-        self.size = (150,120)
-        self.pos = (790,240)
         self.opciones_seleccionadas = []
-
 
     def on_touch_down(self,touch):
         if self.collide_point(*touch.pos):
@@ -131,7 +78,6 @@ class BotonHerramientas(ButtonBehavior,Image):
             self.grid.add_widget(btn)
 
         self.fila = informacion_personaje(imagen="Imagenes/Recurso Seleccionado.png",inf="",nombre="")
-        
 
         self.boton_aceptar = botonAceptar(all_opciones=self.all_opciones,popup=self.popup_H,Id="Herramienta")
         self.boton_salir = botonSalir(popup=self.popup_H)
@@ -173,20 +119,7 @@ class OpcionHerramienta(ButtonBehavior, Image,FloatLayout):
                     self.contenedor_cant.add_widget(self.cant)
                     self.contenedor_cant.add_widget(self.btn_aceptar)
                     
-
                     self.popup_cant.open()
-                '''elif self.opcion == "Portatiles":
-                    self.contenedor_cant = vent_cant()
-                    self.cant = TextInput(size_hint=(None,None),size=(200,30),hint_text="Cantidad",cursor_color=(1,0,0,1),background_color=(0,0,0,0.4),font_size=17,pos_hint={"center_x":0.5,"top":1},foreground_color=(1,1,1,1))
-                    self.popup_cant = Popup(title=f"Diga cantidad de {self.opcion}",content=self.contenedor_cant,size_hint=(None,None),size=(250,150),background_color=(0.4,0,0.9,1))
-                    self.btn_aceptar = Button(size_hint=(None,None),size=(100,30),text="Aceptar",pos_hint={"center_x":0.50,"center_y":0.1},padding=(0,100),background_color=(0.6,0,1,0.7))
-
-                    self.contenedor_cant.add_widget(self.cant)
-                    self.contenedor_cant.add_widget(self.btn_aceptar)
-
-                    self.popup_cant.open()'''
-            
-        
             else: 
                 self.state = 'normal'
                 if self.opcion == 'Gafas virtuales':
@@ -205,8 +138,6 @@ class OpcionHerramienta(ButtonBehavior, Image,FloatLayout):
             print("Se agrego correctamete")
             print(evento.cantidad)
             self.popup_cant.dismiss()
-                
-
         
     def on_press(self):
         self.seleccionado = not self.seleccionado
@@ -214,16 +145,6 @@ class OpcionHerramienta(ButtonBehavior, Image,FloatLayout):
             self.source = self.img_press
         else:
             self.source = self.img  # Imagen cuando no está seleccionado
-        
-class vent_cant(BoxLayout):
-    def __init__(self):
-        super().__init__()
-        self.size_hint=(None,None)
-        self.size=(220,85)
-        self.orientation="vertical"
-        self.spacing=20
-        
-
 
 class BotonPersonal(ButtonBehavior,Image):
         def __init__(self):
@@ -270,9 +191,7 @@ class BotonPersonal(ButtonBehavior,Image):
                 self.grid.add_widget(btn)
             
             #Informacion del recurso
-            self.fila = informacion_personaje(imagen="Imagenes/Persona Seleccionada.png",inf="",nombre="")
-            
-            
+            self.fila = informacion_personaje(imagen="Imagenes/Persona Seleccionada.png",inf="",nombre="")         
 
             #Creando los botones de accion:
             self.boton_aceptar = botonAceptar(all_opciones=self.all_opciones,popup=self.popup,Id="Persona")
@@ -296,7 +215,6 @@ class botonAceptar(ButtonBehavior,Image):
         self.all_opciones = all_opciones
         self.Id = Id 
 
-
     def on_touch_down(self,touch):
         if self.collide_point(*touch.pos):
             self.source="Imagenes/Aceptar_pulsado.png"
@@ -318,29 +236,10 @@ class botonAceptar(ButtonBehavior,Image):
                         n.append(1)
             print(evento.recursos_persona)
             self.popup.dismiss()
-
-
     
     def restaurar_color(self,touch):
             self.source = "Imagenes/Aceptar.png"
 
-class botonSalir(ButtonBehavior,Image):
-    def __init__(self,popup):
-        super().__init__()
-        self.source="Imagenes/Cancelar.png"
-        self.size_hint = (None,None)
-        self.size = (250,90)
-        self.pos = (620,60)
-        self.popup = popup
-
-    def on_touch_down(self,touch):
-        if self.collide_point(*touch.pos):
-            self.source="Imagenes/Cancelar_pulsado.png"
-            Clock.schedule_once(lambda dt: self.restaurar_color(touch), 0.15)
-            self.popup.dismiss()
-
-    def restaurar_color(self,touch):
-            self.source = "Imagenes/Cancelar.png"
 
 class OpcionPersonal(ButtonBehavior, Image, BoxLayout):
     def __init__(self, opcion,img_press,inf, **kwargs):
@@ -586,9 +485,7 @@ class Agregar_Evento(FloatLayout):
             day_fin=self.day_fin,
             hora_fin=self.hora_fin,
             min_fin=self.min_fin
-
             )
-
 
         self.buscar_hueco = ButtonBuscarHueco(input_nombre=self.input_nombre,input_sala=self.selecc_sala,)
 
@@ -627,75 +524,16 @@ class Agregar_Evento(FloatLayout):
             "Sala de conferencias": "Imagenes/Sala de conferencias.png",
             "Sala de optica": "Imagenes/Sala de Optica.png"
         }    
-        print(rutas[seleccion])
         win.Lbl.actualizar_imagen(rutas[seleccion])
-
-
-'''class Lbl(BoxLayout):
-    def __init__(self,):
-        super().__init__()
-        self.imagen = Image(source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Sala Planetario.png",size_hint= (None,None), size=self.size)
-        self.add_widget(self.imagen)'''
-
-class Lbl(BoxLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        # Solo un widget de imagen que se actualiza
-        self.imagen_widget = Image(
-            source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Sala Planetario.png",
-            size_hint=(None, None),
-            size=self.size
-        )
-        self.add_widget(self.imagen_widget)
-    
-    def actualizar_imagen(self, nueva_ruta):
-        print("Aaaaaaaaaaaaaaaaaaa")
-        """Solo actualiza la fuente de la imagen existente"""
-        self.imagen_widget.source = nueva_ruta
-        self.imagen_widget.reload()  # Forzar recarga
-
-class Item_event(ButtonBehavior,BoxLayout):
-    def __init__(self,nombre,info,hora):
-        super().__init__()
-        self.orientation = "horizontal"
-        self.size_hint=(None,None)
-        self.size=(870,80)
-        self.pos = self.center
-        self.nombre = nombre
-        self.info = info
-        recursos = ""
-        self.hora = hora
-
-
-
-        for rec in self.info:
-            if rec[1] > 1:
-                recursos += f" {str(rec[0])} : {str(rec[1])},"
-            else:
-                recursos += f" {str(rec[0])},"
-
-        informacion = Label(text=f"              Recursos:\n{recursos}",font_size=12,text_size=(280,60),pos_hint={"center_x":0,"center_y":0.7},color=(1,1,1,1))
-        inf_hora = Label(text=self.hora,color=(0,0,0,1),size_hint=(None,None),size=(220,80))
-        
-        self.add_widget(Label(text= self.nombre,font_size=20,text_size=(220,80),valign="center"))
-        self.add_widget(inf_hora)
-        self.add_widget(informacion)
-
 
 class cont_event(BoxLayout):
     def __init__(self):
         super().__init__()
-        self.orientation='vertical'
-        self.size_hint = (None,None)
         self.bind(minimum_height=self.setter('height'))
-        self.spacing = 8
-
         eventos = leer_json(ruta_eventos)
 
         for event in eventos.get("eventos"):
             self.add_widget(Item_event(nombre=event["nombre"],info=event["recursos"],hora=f"{event["inicio"]} : {event["fin"]}"))
- 
-
 
 class Ver_Eventos(FloatLayout):
     def __init__(self):
@@ -705,9 +543,6 @@ class Ver_Eventos(FloatLayout):
         self.contenedor_eventos = cont_event()
         self.lista_eventos.add_widget(self.contenedor_eventos)
         self.add_widget(self.lista_eventos)
-    
-
-
 
 class Texto(Label):
     def __init__(self):
@@ -769,20 +604,16 @@ class BoxL(BoxLayout):
         self.boxlayout_dinamico.add_widget(self.nueva_ventana)
         
     def resaltar_boton_activo(self, boton_activo):
-        """Resalta el botón activo y desresalta los demás"""
-        color_activo = (0.3, 0.1, 0.8, 1)    # Azul/morado para activo
-        color_inactivo = (0, 0, 0, 0)         # Transparente para inactivos
+        color_activo = (0.3, 0.1, 0.8, 1)    
+        color_inactivo = (0, 0, 0, 0)         
         
-        # Recorrer todos los botones de la barra
         for boton in self.barra_botones.children:
             if boton == boton_activo:
-                # Botón activo - color destacado
                 boton.background_color = color_activo
-                boton.color = (1, 1, 1, 1)  # Texto blanco
+                boton.color = (1, 1, 1, 1) 
             else:
-                # Botones inactivos - color normal
                 boton.background_color = color_inactivo
-                boton.color = (1, 1, 1, 1)  # Texto blanco
+                boton.color = (1, 1, 1, 1)  
 
 
 

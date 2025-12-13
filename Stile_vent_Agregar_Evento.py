@@ -123,6 +123,20 @@ kv2 = '''
     pos_hint: {"center_x": 0.21,"center_y" : 0.8}
     background_color: 0,0,0,0.2
 
+<Lbl>:
+    size_hint: None,None
+    size: 300,400
+    pos_hint: {"center_x": 0.21,"top": 0.70}
+    
+
+    canvas.before:
+        Color:
+            rgba: 0,0,0,1
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [15]
+
 <ButtonGuardar>:
     source: "Imagenes/Copilot_20251117_003303.png"
     size_hint: None,None
