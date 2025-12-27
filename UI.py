@@ -1,4 +1,4 @@
-from Imports import *
+from modules import *
 
 Window.size = (1150,900)
 
@@ -33,7 +33,7 @@ class BotonHerramientas(ButtonBehavior,Image):
         self.grid = GridLayout(cols=5,spacing=40)
         self.row4 =FloatLayout(size_hint=(None,None),size=(725,140),pos=self.pos)
 
-        opciones = [("Polarimetro",objeto2,obj2),("Camara estelar",objeto3,obj3),("Espectrometro",objeto4,obj4),("Telescopio de Galaxias",objeto5,obj5),("Portatiles",objeto6,obj6),("Telescopio de agujeros negros",objeto7,obj7),("Gafas virtuales",objeto8,obj8),("Telescopio lunar",objeto9,obj9),
+        opciones = [("Polarimetro",objeto2,obj2),("Camara estelar",objeto3,obj3),("Espectrometro",objeto4,obj4),("Telescopio de Galaxias",objeto5,obj5),("Portatiles",objeto6,obj6),("Telescopio de agujeros negros",objeto7,obj7),("Gafas virtuales",objeto8,obj8),("Telescopio Lunar",objeto9,obj9),
         ("Telescopio de Rayos Gama",objeto10,obj10),("Telescopio solar",objeto11,obj11),("Radio Telescopio",objeto12,obj12),("Telescopio",objeto13,obj13)]
 
         self.all_opciones = []
@@ -72,6 +72,12 @@ class OpcionHerramienta(ButtonBehavior, Image,FloatLayout):
         self.size = (100,100)
         self.img_press = img_press
         self.inf = inf
+    
+    def mostrar_error(self,error):
+        self.mensaje = error
+        self.error = Label(text=self.mensaje,size_hint=(None,None),size=(250,140),pos_hint={"center_x":0.3,"center_y":0},text_size=(200,140),valign='top')
+        self.popup_error = Popup(title='Error',content=self.error,size_hint=(None, None),size=(250, 140),background_color=(0.2,0,0.6,0.9))
+        self.popup_error.open()
  
     def on_touch_down(self,touch):
         if self.collide_point(*touch.pos):
@@ -82,11 +88,12 @@ class OpcionHerramienta(ButtonBehavior, Image,FloatLayout):
             print(apps.contenedor.body.nueva_ventana.recursos_herramienta.fila.nombre)
             if self.state=="normal":
                 self.state = 'down'
+                print(self.state)
                 if self.opcion == "Gafas virtuales" or self.opcion == "Portatiles" or self.opcion == "Telescopio":
                     self.contenedor_cant = vent_cant()
-                    self.cant = TextInput(size_hint=(None,None),size=(200,30),hint_text="Cantidad",cursor_color=(1,0,0,1),background_color=(0,0,0,0.4),font_size=17,pos_hint={"center_x":0.5,"top":1},foreground_color=(1,1,1,1))
+                    self.cant = TextInput(size_hint=(None,None),size=(200,30),hint_text="Cantidad",cursor_color=(1,0,0,1),background_color=(0,0,0,0.4),font_size=17,pos = (476,435),foreground_color=(1,1,1,1))
                     self.popup_cant = Popup(title=f"Diga cantidad de {self.opcion}",content=self.contenedor_cant,size_hint=(None,None),size=(250,150),background_color=(0.4,0,0.9,1))
-                    self.btn_aceptar = Button(size_hint=(None,None),size=(100,30),text="Aceptar",pos_hint={"center_x":0.50,"center_y":0.1},padding=(0,100),background_color=(0.6,0,1,0.7))
+                    self.btn_aceptar = Button(size_hint=(None,None),size=(100,30),text="Aceptar",pos = (520,395),padding=(0,100),background_color=(0.6,0,1,0.7))
 
                     self.btn_aceptar.bind(on_press=self.guardar)
                     
@@ -103,14 +110,15 @@ class OpcionHerramienta(ButtonBehavior, Image,FloatLayout):
     def guardar(self,instance):
 
         try:
+            print(self.cant.text)
             evento.cantidad.append(int(self.cant.text))
+            
 
         except Exception as e:
-            print("Cantidad incorrecta")
+            error = e.args[0] if type(e) != ValueError else "Cantidad incorrecta"
+            self.mostrar_error(error)
 
         else:
-            print("Se agrego correctamete")
-            print(evento.cantidad)
             self.popup_cant.dismiss()
         
     def on_press(self):
@@ -144,7 +152,7 @@ class BotonPersonal(ButtonBehavior,Image):
             self.contenedor = Contenedor_Recursos()
             self.row4 =FloatLayout(size_hint=(None,None),size=(725,140),pos=self.pos)
 
-            opciones = [("Carl Sagan",persona1,inf1),("Vera Rubin",persona2,inf2),("Henrietta Leavitt",persona3,inf3),("Edwin Huble",persona5,inf5),("Claudia Aguilar",persona6,inf6),("Margaret Burbidge",persona8,inf8),("Hans Bethe",persona9,inf9),
+            opciones = [("Carl Sagan",persona1,inf1),("Vera Rubin",persona2,inf2),("Henrietta Leavitt",persona3,inf3),("Edwin Huble",persona5,inf5),("Cleo Abram",persona6,inf6),("Margaret Burbidge",persona8,inf8),("Hans Bethe",persona9,inf9),
             ("Neil Tyson",persona10,inf10),("Stiphen Hawking",persona11,inf11)]
 
             self.all_opciones = []
@@ -175,7 +183,6 @@ class BotonPersonal(ButtonBehavior,Image):
             self.contenedor.add_widget(self.grid)
             self.contenedor.add_widget(self.fila)
             self.contenedor.add_widget(self.row4)
-
             self.menu.add_widget(self.contenedor)
     
 class botonAceptar(ButtonBehavior,Image):
@@ -199,15 +206,19 @@ class botonAceptar(ButtonBehavior,Image):
                 evento.recursos_persona= [(btn.opcion,1) for btn in self.all_opciones if btn.state == 'down']
 
             if self.Id == "Herramienta":
-                i=len(evento.cantidad)#Guardando en i la cantidad de elementos de la lista
+                i=len(evento.cantidad)#Guardando en i la cantidad de elementos de la lista        
                 evento.recursos_herramienta.clear()
                 evento.recursos_herramienta = [[btn.opcion] for btn in self.all_opciones if btn.state == 'down']
+                print(evento.recursos_herramienta)
                 for n in evento.recursos_herramienta:
-                    if n[0]=="Portatiles" or n[0]=="Telescopio" or n[0]=="Gafas virtuales":
-                        n.append(evento.cantidad[i-1])#Agregando los elementos de la lista desde la ultima posicion a la primera
-                        i-=1#Restandole 1 para poder pasar al antecesor
+                    if (n[0]=="Portatiles" or n[0]=="Telescopio" or n[0]=="Gafas virtuales"):
+                        if i == 0: n.append(0)
+                        else:
+                            n.append(evento.cantidad[i-1])#Agregando los elementos de la lista desde la ultima posicion a la primera
+                            i-=1#Restandole 1 para poder pasar al antecesor
                     else:
                         n.append(1)
+
             print(evento.recursos_persona)
             self.popup.dismiss()
     
@@ -383,7 +394,7 @@ class ButtonBuscarHueco(ButtonBehavior,Image):
             if len(evento.recursos_herramienta) == 0: raise Exception("Debe seleccionar al menos 1 recurso herramienta")
             if len(evento.recursos_persona) == 0: raise Exception("Debe seleccionar un cientifico para su evento")
 
-            if self.input_sala.text == "Planetario" and not(("Claudia Aguilar",1) in evento.recursos_persona): raise Exception(f"En la sala Planetario debe estar la encargada de esta sala")
+            if self.input_sala.text == "Planetario" and not(("Cleo Abram",1) in evento.recursos_persona): raise Exception(f"En la sala Planetario debe estar la encargada de esta sala")
 
             for n in evento.recursos_herramienta:
                 if (n[0] == "Gafas virtuales" or n[0] == "Portatiles" or n[0] == "Telescopio") and not(self.input_sala.text == "Sala de conferencias" or self.input_sala.text == "Planetario"): raise Exception(f"El recurso {n[0]} solo puede ser usado en la sala de conferencias o en el planetario")
