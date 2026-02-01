@@ -27,7 +27,7 @@ persona10 = "Imagenes/Neil Tyson.png"
 persona11 = "Imagenes/Stiphen Hawking.png"
 
 
-#Informacion de los persnajes
+#Informacion de los cientificos
 inf1 = "Carl Sagan:\n\nEspecialista en el estudio del sol y de ondas transmitidas por este"
 inf2 = "Vera Rubin:\n\nEs especialista en galaxias, puede realizar estudios sobre cualquier galaxias o astro lejano, al igual que impartir conferencias"
 inf3 = "Henrietta Leavitt:\n\nEs la especialista en optica, cualquier evento que requiera de el estudio de la luz de las estrellas o galaxias"

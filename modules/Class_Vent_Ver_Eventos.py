@@ -7,7 +7,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.clock import Clock
 
-
+#BoxLayout que contiene la informacion del evento
 class Item_event(ButtonBehavior,BoxLayout):
     def __init__(self,nombre,info,hora):
         super().__init__()

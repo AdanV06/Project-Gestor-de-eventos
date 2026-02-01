@@ -7,6 +7,7 @@ Builder.load_string(kv2)
 Builder.load_string(kv3)
 Builder.load_string(kv4)
 
+#Esta clase es la que almacena las elecciones de los recursos para el evento
 class evento:
     recursos_persona = []
     recursos_herramienta = []
@@ -14,7 +15,7 @@ class evento:
     datos = {}
     cantidad = []
 
-
+#Esta clase es para crear el boton que abre la ventana de las herramientas para seleccionar
 class BotonHerramientas(ButtonBehavior,Image):
     def __init__(self):
         super().__init__()
@@ -62,6 +63,7 @@ class BotonHerramientas(ButtonBehavior,Image):
         self.contenedor.add_widget(self.row4)
         self.menu_H.add_widget(self.contenedor)
 
+#Esta clase crea las opciones que tenemos de recursos 
 class OpcionHerramienta(ButtonBehavior, Image,FloatLayout):
     def __init__(self, opcion,img_press,inf, **kwargs):
         super().__init__(**kwargs)
@@ -128,6 +130,7 @@ class OpcionHerramienta(ButtonBehavior, Image,FloatLayout):
         else:
             self.source = self.img  # Imagen cuando no está seleccionado
 
+#Boton que abre la ventana parra seleccionar a las personas que necesitamos
 class BotonPersonal(ButtonBehavior,Image):
         def __init__(self):
             super().__init__()
@@ -184,7 +187,8 @@ class BotonPersonal(ButtonBehavior,Image):
             self.contenedor.add_widget(self.fila)
             self.contenedor.add_widget(self.row4)
             self.menu.add_widget(self.contenedor)
-    
+
+#Boton Aceptar que se utiliza para guardar las elecciones de recursos
 class botonAceptar(ButtonBehavior,Image):
     def __init__(self,all_opciones,popup,Id):
         super().__init__()
@@ -203,13 +207,13 @@ class botonAceptar(ButtonBehavior,Image):
             if self.Id == "Persona":
                 evento.recursos_persona.clear()
         
-                evento.recursos_persona= [(btn.opcion,1) for btn in self.all_opciones if btn.state == 'down']
+                evento.recursos_persona= [[btn.opcion,1] for btn in self.all_opciones if btn.state == 'down']
 
             if self.Id == "Herramienta":
                 i=len(evento.cantidad)#Guardando en i la cantidad de elementos de la lista        
                 evento.recursos_herramienta.clear()
                 evento.recursos_herramienta = [[btn.opcion] for btn in self.all_opciones if btn.state == 'down']
-                print(evento.recursos_herramienta)
+
                 for n in evento.recursos_herramienta:
                     if (n[0]=="Portatiles" or n[0]=="Telescopio" or n[0]=="Gafas virtuales"):
                         if i == 0: n.append(0)
@@ -220,12 +224,15 @@ class botonAceptar(ButtonBehavior,Image):
                         n.append(1)
 
             print(evento.recursos_persona)
+            print(evento.recursos_herramienta)
+            print(evento.recursos_sala)
+            
             self.popup.dismiss()
     
     def restaurar_color(self,touch):
             self.source = "Imagenes/Aceptar.png"
 
-
+#Esta clase crea las opciones que podemos escoger de personas
 class OpcionPersonal(ButtonBehavior, Image, BoxLayout):
     def __init__(self, opcion,img_press,inf, **kwargs):
         super().__init__(**kwargs)
@@ -256,6 +263,7 @@ class OpcionPersonal(ButtonBehavior, Image, BoxLayout):
         else:
             self.source = self.img  # Imagen cuando no está seleccionado
 
+#Boton que guarda el evento con las caracteristicas dadas
 class ButtonGuardar(ButtonBehavior,Image):
     def __init__(self,input_nombre,year_inicio,month_inicio,day_inicio,hora_inicio,min_inicio,input_sala,year_fin,month_fin,day_fin,hora_fin,min_fin):
         super().__init__()
@@ -272,6 +280,7 @@ class ButtonGuardar(ButtonBehavior,Image):
         self.min_fin = min_fin
         self.input_sala = input_sala
 
+    #Funcion que muestra un mensaje en caso de error
     def mostrar_error(self,error):
         self.mensaje = error
         self.error = Label(text=self.mensaje,size_hint=(None,None),size=(250,140),pos_hint={"center_x":0.3,"center_y":0},text_size=(200,140),valign='top')
@@ -284,19 +293,22 @@ class ButtonGuardar(ButtonBehavior,Image):
             self.source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Guardar_Touch.png"
             Clock.schedule_once(lambda dt: self.restaurar_color(touch), 0.15)
         
-            #Agregando el nombre del evento:
+            #Esta parte verifica que no hallan errores en la entrada de los datos del evento
             try:
+                #Verificar si falta algun dato
                 if self.input_nombre.text == "": raise Exception("Debe darle un nombre al evento")
                 if self.input_sala.text == "Seleccione una sala": raise Exception("Debe seleccionar una sala")
                 if len(evento.recursos_herramienta) == 0: raise Exception("Debe seleccionar al menos 1 recurso herramienta")
                 if len(evento.recursos_persona) == 0: raise Exception("Debe seleccionar un cientifico para su evento")
 
+                #Convirtiendo la entrada de la fecha inicio a etero
                 year = int(self.year_inicio.text)
                 month = int(self.month_inicio.text)
                 day = int(self.day_inicio.text)
                 hora = int(self.hora_inicio.text)
                 minu = int(self.min_inicio.text)
-
+                
+                #Convirtiendo la entrada de la fecha fin a entero
                 year_fin = int(self.year_fin.text)
                 month_fin = int(self.month_fin.text)
                 day_fin = int(self.day_fin.text)
@@ -319,46 +331,40 @@ class ButtonGuardar(ButtonBehavior,Image):
                 if 0 > minu_fin or minu_fin > 59: raise Exception("La hora del final de su evento es incorrecta")
                 if datetime.datetime(year_fin,month_fin,day_fin,hora_fin,minu_fin) < datetime.datetime(year,month,day,hora,minu): raise Exception("La fecha fin es antes que la fecha de inicio")
 
-                if self.input_sala.text == "Planetario" and not(("Claudia Aguilar",1) in evento.recursos_persona): raise Exception(f"En la sala Planetario debe estar la encargada de esta sala")
-
-                for n in evento.recursos_herramienta:
-                    if (n[0] == "Gafas virtuales" or n[0] == "Portatiles" or n[0] == "Telescopio") and not(self.input_sala.text == "Sala de conferencias" or self.input_sala.text == "Planetario"): raise Exception(f"El recurso {n[0]} solo puede ser usado en la sala de conferencias o en el planetario")
-                    if (n[0] == "Telescopio de agujeros negros") and not(("Stiphen Hawking",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser usado por especialistas de agujeros negros")
-                    if (n[0] == "Telescopio Lunar") and not(("Margaret Burbidge",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser utilizado por especialistas de la luna")
-                    if (n[0] == "Telescopio de Galaxias") and not(("Vera Rubin",1) in evento.recursos_persona or ("Edwin Huble",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser utilizado por especialistas de galaxias")
-                    if (n[0] == "Telescopio Solar") and not(("Hans Bethe",1) in evento.recursos_persona or ("Carl Sagan",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser utilizados por especialistas del sol")
-                    if (n[0] == "Polarimetro" or n[0] == "Espectrometro") and not(("Henrietta Leavitt",1) in evento.recursos_persona): raise Exception(f"El {n[0]} es solo puede ser utilizado por Henrietta Leavitt")
-
+            #Si existe algun error mostrarlo en pantalla
             except Exception as e:
                 error = e.args[0] if type(e) != ValueError else "Su formato de fecha es incorrecto"
                 self.mostrar_error(error)
-                
+            
+            #Si no hubo ningun error verificar los complementarios de los recursos y guardar el evento 
             else:
                 print(f"Recursos herramienta: {evento.recursos_herramienta}")
                 print(f"Recursos sala: {evento.recursos_sala}")
 
-                nombre = self.input_nombre.text
-                fecha = datetime.datetime(year,month,day,hora,minu)
-                fecha_fin = datetime.datetime(year_fin,month_fin,day_fin,hora_fin,minu_fin)
                 evento.recursos_sala.clear()
-                evento.recursos_sala.append((self.input_sala.text,1))
-                recursos = evento.recursos_sala+evento.recursos_herramienta+evento.recursos_persona
+                evento.recursos_sala.append([self.input_sala.text,1])
+                result_complementarios = operaciones.verificar_complementarios(evento.recursos_herramienta,evento.recursos_sala,evento.recursos_persona)
 
-                print(recursos)
+                if result_complementarios == True:
+                    nombre = self.input_nombre.text
+                    fecha = datetime.datetime(year,month,day,hora,minu)
+                    fecha_fin = datetime.datetime(year_fin,month_fin,day_fin,hora_fin,minu_fin)
+                    recursos = evento.recursos_sala+evento.recursos_herramienta+evento.recursos_persona
 
-                event = Evento(
-                    nombre= nombre,
-                    inicio= fecha,
-                    fin= fecha_fin,
-                    recursos=recursos
-                )
+                    event = Evento(
+                        nombre= nombre,
+                        inicio= fecha,
+                        fin= fecha_fin,
+                        recursos=recursos
+                        )
 
-                self.mostrar_error(operaciones.agregar_evento(event))
-
+                    self.mostrar_error(operaciones.agregar_evento(event))
+                else:
+                    self.mostrar_error(result_complementarios)
 
     def restaurar_color(self,touch):
             self.source = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Copilot_20251117_003303.png"
-
+#Boton para Buscar horario disponible para el evento
 class ButtonBuscarHueco(ButtonBehavior,Image):
     def __init__(self,input_nombre,input_sala):
         super().__init__()
@@ -385,7 +391,10 @@ class ButtonBuscarHueco(ButtonBehavior,Image):
 
         self.popup.open()
     
+    #Funcion que recoge todos los datos y manda a buscar un horario
     def buscar(self,instance):
+
+        #Esta parte verifica que no halla ninguna entrada incorrecta en los datos del evento
         try:
             inicio = datetime.datetime.now()
             fin = inicio + datetime.timedelta(hours=int(self.horas.text))
@@ -394,50 +403,54 @@ class ButtonBuscarHueco(ButtonBehavior,Image):
             if len(evento.recursos_herramienta) == 0: raise Exception("Debe seleccionar al menos 1 recurso herramienta")
             if len(evento.recursos_persona) == 0: raise Exception("Debe seleccionar un cientifico para su evento")
 
-            if self.input_sala.text == "Planetario" and not(("Cleo Abram",1) in evento.recursos_persona): raise Exception(f"En la sala Planetario debe estar la encargada de esta sala")
-
-            for n in evento.recursos_herramienta:
-                if (n[0] == "Gafas virtuales" or n[0] == "Portatiles" or n[0] == "Telescopio") and not(self.input_sala.text == "Sala de conferencias" or self.input_sala.text == "Planetario"): raise Exception(f"El recurso {n[0]} solo puede ser usado en la sala de conferencias o en el planetario")
-                if (n[0] == "Telescopio de agujeros negros") and not(("Stiphen Hawking",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser usado por especialistas de agujeros negros")
-                if (n[0] == "Telescopio Lunar") and not(("Margaret Burbidge",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser utilizado por especialistas en astros")
-                if (n[0] == "Telescopio de Galaxias") and not(("Vera Rubin",1) in evento.recursos_persona or ("Edwin Huble",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser utilizado por especialistas de galaxias")
-                if (n[0] == "Telescopio solar") and not(("Hans Bethe",1) in evento.recursos_persona or ("Carl Sagan",1) in evento.recursos_persona or ("Neil Tyson",1) in evento.recursos_persona): raise Exception(f"El {n[0]} solo puede ser utilizados por especialistas del sol")
-                if (n[0] == "Polarimetro" or n[0] == "Espectrometro") and not(("Henrietta Leavitt") in evento.recursos_persona): raise Exception(f"El {n[0]} es solo puede ser utilizado por Henrietta Leavitt")
-
+        #Si existe algun error esta parte manda a mostrarlo en pantalla
         except Exception as e:
             error = e.args[0] if type(e) != ValueError else "El formato de la duracion es incorrecto"
             self.mostrar_error(error)
         
+        #Si no hubo errores en la entrada se verifican sus complementarios y se manda a guardar el evento en un horario disponible
         else:
-            nombre = self.input_nombre.text
-            fecha = inicio
-            fecha_fin = fin
             evento.recursos_sala.clear()
-            evento.recursos_sala.append((self.input_sala.text,1))
-            recursos = evento.recursos_sala+evento.recursos_herramienta+evento.recursos_persona
-    
-            event = Evento(
-                nombre=nombre,
-                inicio=fecha,
-                fin=fecha_fin,
-                recursos=recursos
-            )
-            self.mostrar_error(operaciones.buscar(event,int(self.horas.text)))
-            
+            evento.recursos_sala.append([self.input_sala.text,1])
+            result_complementarios = operaciones.verificar_complementarios(evento.recursos_herramienta,evento.recursos_sala,evento.recursos_persona)
+            result_excluyentes = operaciones.verificar_excluyentes(evento.recursos_persona)
 
+            if result_excluyentes == True:
+                if result_complementarios == True:
+                    nombre = self.input_nombre.text
+                    fecha = inicio
+                    fecha_fin = fin
+                    recursos = evento.recursos_sala+evento.recursos_herramienta+evento.recursos_persona
+
+                    event = Evento(
+                        nombre=nombre,
+                        inicio=fecha,
+                        fin=fecha_fin,
+                        recursos=recursos
+                        )
+                    self.mostrar_error(operaciones.buscar(event,int(self.horas.text)))
+
+                else:
+                    self.mostrar_error(result_complementarios)
+            else:
+                self.mostrar_error(result_excluyentes)
+
+    #Funcion que muestra cualquier mensaje 
     def mostrar_error(self,error):
         self.error = Label(text=error,size_hint=(None,None),size=(250,140),pos_hint={"center_x":0.3,"center_y":0},text_size=(200,140),valign='top')
         self.popup_error = Popup(title='Error',content=self.error,size_hint=(None, None),size=(250, 140),background_color=(0.2,0,0.6,0.9))
         self.popup_error.open()
 
+    #Funcion para restaurar el color del boton Buscar Horario luego de pulsarse
     def restaurar_color(self,touch):    
             self.source = "Imagenes/Buscar Horario.png"
-            
+
+#Ventana Agregar Evento que contiene todo lo necesario para agregar el evento
 class Agregar_Evento(FloatLayout):
     def __init__(self):
         super().__init__()
-        #self.orientation = "horizontal"
-
+        
+        #Definiendo los elementos de la ventana Agregar Eventos
         self.input_nombre = Input_Name()
         self.year_inicio = Year_inicio()
         self.year_fin = Year_fin()
@@ -478,6 +491,7 @@ class Agregar_Evento(FloatLayout):
 
         self.text_recursos = Text_recursos()
 
+        #Agregando los elementos a la ventana:
         self.add_widget(self.buscar_hueco)
         self.add_widget(self.guardar)
         self.add_widget(self.recursos_herramienta)
@@ -500,17 +514,19 @@ class Agregar_Evento(FloatLayout):
         self.add_widget(self.input_nombre)
         self.Lbl=Lbl()
         self.add_widget(self.Lbl)
-        
+    
+    #Funcion para cambiar la imagen de la sala
     def cambiar_imagen_lbl(win, ins, seleccion):
         rutas = {
             "Planetario": "Imagenes/Sala Planetario.png",
             "Cupula de observacion": "Imagenes/Cupula de Observacion.png",
-            "Cupula de fotografia": "Imagenes/Sala Telescopio Principal.png",
+            "Cupula de fotografia": "Imagenes/Sala de fotografias.png",
             "Sala de conferencias": "Imagenes/Sala de conferencias.png",
             "Sala de optica": "Imagenes/Sala de Optica.png"
         }    
         win.Lbl.actualizar_imagen(rutas[seleccion])
 
+#Contenedor de la lista de eventos agregados
 class cont_event(BoxLayout):
     def __init__(self):
         super().__init__()
@@ -520,19 +536,22 @@ class cont_event(BoxLayout):
         for event in eventos.get("eventos"):
             self.add_widget(Item_event(nombre=event["nombre"],info=event["recursos"],hora=f"{event["inicio"]} : {event["fin"]}"))
 
+
 class Ver_Eventos(FloatLayout):
     def __init__(self):
         super().__init__()
-        self.orientation='vertical'
+        self.orientation = 'vertical'
         self.lista_eventos = ScrollView(pos=(138,225))
         self.contenedor_eventos = cont_event()
         self.lista_eventos.add_widget(self.contenedor_eventos)
         self.add_widget(self.lista_eventos)
 
+#Texto del titulo
 class Texto(Label):
     def __init__(self):
         super().__init__()        
 
+#BoxLayout que contiene el titulo
 class Titulo(BoxLayout):
     def __init__(self):
         super().__init__()
@@ -544,6 +563,7 @@ class Buttons(Button):
     def __init__(self,texto):
         super().__init__(text=texto)
 
+#Contenedor de los botones con los nombres de las ventanas
 class BoxButtons(BoxLayout):
     def __init__(self,box_principal):
         super().__init__()
@@ -564,6 +584,7 @@ class BoxButtons(BoxLayout):
         self.box_principal.mostrar(instance.contenido)
         self.box_principal.resaltar_boton_activo(instance)
 
+#BoxLayout que contiene todas las opciones del programa
 class BoxL(BoxLayout):
     def __init__(self):
         super().__init__()
@@ -601,7 +622,7 @@ class BoxL(BoxLayout):
                 boton.color = (1, 1, 1, 1)  
 
 
-
+#Clase contenedor que contiene toda la interfaz
 class Contenedor(FloatLayout):
     def __init__(self):
         super().__init__()
