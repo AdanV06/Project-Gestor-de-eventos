@@ -2,7 +2,7 @@ kv4 = '''
 <Item_event>:
     orientation: "horizontal"
     size_hint: None,None
-    size: 870,80
+    size: 870,130
 
     canvas.before:
         Color:
@@ -18,7 +18,7 @@ kv4 = '''
 
     canvas.before:
         Color:
-            rgba: 1,0,0,0
+            rgba: 0,0,0,0
         Rectangle:
             pos: self.pos
             size: self.size

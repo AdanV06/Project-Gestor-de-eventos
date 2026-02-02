@@ -3,7 +3,6 @@
     {
         "nombre": "Polarimetro",
         "tipo": "herramienta",
-        "disponibilidad": true,
         "cantidad":1,
         "complementario": [["Henrietta Leavitt",1]],
         "excluyentes": "NULL"
@@ -11,7 +10,6 @@
         {
         "nombre": "Camara estelar",
         "tipo": "Herramienta",
-        "disponibilidad": true,
         "cantidad": 1,
         "complementario": "NULL",
         "excluyentes": "NULL"
@@ -19,7 +17,6 @@
         {
         "nombre": "Espectrometro",
         "tipo": "Herramienta",
-        "disponibilidad": true,
         "cantidad": 1,
         "complementario": [["Henrietta Leavitt",1]],
         "excluyentes": "NULL"
@@ -27,7 +24,6 @@
         {
         "nombre": "Telescopio de Galaxias",
         "tipo": "Herramienta",
-        "disponibilidad": true,
         "cantidad": 1,
         "complementario": [["Vera Rubin",1],["Neil Tyson",1],["Edwin Huble",1]],
         "excluyentes": "NULL"
@@ -35,7 +31,6 @@
         {
         "nombre": "Portatiles",
         "tipo": "Herramienta",
-        "disponibilidad": true,
         "cantidad": 20,
         "complementario": [["Sala de conferencias",1],["Planetario",1]],
         "excluyentes": "NULL"
@@ -43,7 +38,6 @@
         {
         "nombre": "Telescopio de agujeros negros",
         "tipo": "Herramienta",
-        "disponibilidad": true,
         "cantidad": 1,
         "complementario": [["Stiphen Hawking",1],["Neil Tyson",1]],
         "excluyentes": "NULL"
@@ -51,7 +45,6 @@
         {
         "nombre": "Gafas virtuales",
         "tipo": "Herramienta",
-        "disponibilidad": true,
         "cantidad": 20,
         "complementario": [["Sala de conferencias",1],["Planetario",1]],
         "excluyentes": "NULL"
@@ -59,7 +52,6 @@
         {
         "nombre": "Telescopio Lunar",
         "tipo": "Herramienta",
-        "disponibilidad": true,
         "cantidad": 1,
         "complementario": [["Margaret Burbidge",1],["Neil Tyson",1]],
         "excluyentes": "NULL"
@@ -67,7 +59,6 @@
         {
         "nombre": "Telescopio de Rayos Gama",
         "tipo": "Herramienta",
-        "disponibilidad": true,
         "cantidad": 1,
         "complementario": "NULL",
         "excluyentes": "NULL"
@@ -75,7 +66,6 @@
         {
         "nombre": "Telescopio solar",
         "tipo": "Herramienta",
-        "disponibilidad": true,
         "cantidad": 1,
         "complementario": [["Hans Bethe",1],["Neil Tyson",1],["Carl Sagan",1]],
         "excluyentes": "NULL"
@@ -83,7 +73,6 @@
     {
         "nombre": "Radio Telescopio",
         "tipo": "Herramienta",
-        "disponibilidad": true,
         "cantidad": 1,
         "complementario": "NULL",
         "excluyentes": "NULL"
@@ -91,7 +80,6 @@
         {
         "nombre": "Telescopio",
         "tipo": "Herramienta",
-        "disponibilidad": true,
         "cantidad": 20,
         "complementario": [["Sala de conferencias",1],["Planetario",1]],
         "excluyentes": "NULL"
@@ -99,7 +87,6 @@
     {
         "nombre": "Planetario",
         "tipo": "sala",
-        "disponibilidad": true,
         "cantidad": 1,
         "complementario": [["Cleo Abram",1]],
         "excluyentes": "NULL"
@@ -107,7 +94,6 @@
     {
         "nombre": "Sala de optica",
         "tipo": "sala",
-        "disponibilidad": true,
         "cantidad": 1,
         "complementario": [["Henrietta Leavitt",1]],
         "excluyentes": "NULL"
@@ -115,7 +101,6 @@
     {
         "nombre": "Cupula de fotografia",
         "tipo": "sala",
-        "disponibilidad": true,
         "cantidad": 1,
         "complementario": "NULL",
         "excluyentes": "NULL"
@@ -123,7 +108,6 @@
     {
         "nombre": "Sala de conferencias", 
         "tipo": "sala",
-        "disponibilidad": true,
         "cantidad": 1,
         "complementario": "NULL",
         "excluyentes": "NULL"
@@ -131,7 +115,6 @@
     {
         "nombre": "Cupula de observacion", 
         "tipo": "sala",
-        "disponibilidad": true,
         "cantidad": 1,
         "complementario": "NULL",
         "excluyentes": "NULL"
@@ -139,7 +122,6 @@
     {
         "nombre": "Henrietta Leavitt", 
         "tipo": "personal",
-        "disponibilidad": true,
         "cantidad": 1,
         "complementario": "NULL",
         "excluyentes": "NULL"
@@ -147,7 +129,6 @@
     {
         "nombre": "Edwin Huble", 
         "tipo": "personal",
-        "disponibilidad": true,
         "cantidad": 1,
         "complementario": "NULL",
         "excluyentes": [["Hans Bethe",1],["Carl Sagan",1]]
@@ -155,7 +136,6 @@
     {
         "nombre": "Cleo Abram", 
         "tipo": "personal",
-        "disponibilidad": true,
         "cantidad": 1,
         "complementario": "NULL",
         "excluyentes": "NULL"
@@ -164,7 +144,6 @@
     {
         "nombre": "Margaret Burbidge",
         "tipo": "personal",
-        "disponibilidad": true,
         "cantidad": 1,
         "complementario": "NULL",
         "excluyentes": [["Stiphen Hawking",1]]
@@ -172,7 +151,6 @@
     {
         "nombre": "Hans Bethe",
         "tipo": "personal",
-        "disponibilidad": true,
         "cantidad": 1,
         "complementario": "NULL",
         "excluyentes": "NULL"
@@ -180,7 +158,6 @@
     {
         "nombre": "Neil Tyson",
         "tipo": "personal",
-        "disponibilidad": true,
         "cantidad": 1,
         "complementario": "NULL",
         "excluyentes": "NULL"
@@ -189,7 +166,6 @@
     {
         "nombre": "Stiphen Hawking",
         "tipo": "personal",
-        "disponibilidad": true,
         "cantidad": 1,
         "complementario": "NULL",
         "excluyentes": "NULL"
@@ -197,7 +173,6 @@
     {
         "nombre": "Carl Sagan",
         "tipo": "personal",
-        "disponibilidad": true,
         "cantidad": 1,
         "complementario": "NULL",
         "excluyentes": "NULL"
@@ -205,7 +180,6 @@
     {
         "nombre": "Vera Rubin",
         "tipo": "personal",
-        "disponibilidad": true,
         "cantidad": 1,
         "complementario": "NULL",
         "excluyentes": [["Hans Bethe",1],["Carl Sagan",1]]

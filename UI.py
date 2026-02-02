@@ -113,7 +113,8 @@ class OpcionHerramienta(ButtonBehavior, Image,FloatLayout):
 
         try:
             print(self.cant.text)
-            evento.cantidad.append(int(self.cant.text))
+            evento.cantidad.append([self.opcion,int(self.cant.text)])
+            if int(self.cant.text) <=0: raise Exception("Cantidad incorrecta")
             
 
         except Exception as e:
@@ -210,18 +211,19 @@ class botonAceptar(ButtonBehavior,Image):
                 evento.recursos_persona= [[btn.opcion,1] for btn in self.all_opciones if btn.state == 'down']
 
             if self.Id == "Herramienta":
-                i=len(evento.cantidad)#Guardando en i la cantidad de elementos de la lista        
                 evento.recursos_herramienta.clear()
                 evento.recursos_herramienta = [[btn.opcion] for btn in self.all_opciones if btn.state == 'down']
 
-                for n in evento.recursos_herramienta:
-                    if (n[0]=="Portatiles" or n[0]=="Telescopio" or n[0]=="Gafas virtuales"):
-                        if i == 0: n.append(0)
+                for n in evento.recursos_herramienta: #Iterando en los recursos que se seleccionaron
+                    if (n[0]=="Portatiles" or n[0]=="Telescopio" or n[0]=="Gafas virtuales"): 
+                        if len(evento.cantidad) == 0: n.append(1) #Si no se selecciono ninguna cantidad agregar 1 por defecto
                         else:
-                            n.append(evento.cantidad[i-1])#Agregando los elementos de la lista desde la ultima posicion a la primera
-                            i-=1#Restandole 1 para poder pasar al antecesor
-                    else:
-                        n.append(1)
+                            for elem in evento.cantidad: #Iterando en la lista que contiene la cantidad del recurso
+                                if n[0] == elem[0]:#Cuando se encuentre el recurso en la lista de cantidad
+                                    n.append(elem[1])#Agregar la cantidad seleccionada del recurso
+                    else:# SI el recurso no es de los recursos con cantidad
+                        n.append(1) #Agregarle como cantidad 1
+                evento.cantidad.clear() #Eliminar la lista de cantidades al finalizar
 
             print(evento.recursos_persona)
             print(evento.recursos_herramienta)
@@ -297,9 +299,12 @@ class ButtonGuardar(ButtonBehavior,Image):
             try:
                 #Verificar si falta algun dato
                 if self.input_nombre.text == "": raise Exception("Debe darle un nombre al evento")
+                if len(self.input_nombre.text) > 30: raise Exception("El nombre del evento solo puede tener hasta 30 caracteres")
                 if self.input_sala.text == "Seleccione una sala": raise Exception("Debe seleccionar una sala")
-                if len(evento.recursos_herramienta) == 0: raise Exception("Debe seleccionar al menos 1 recurso herramienta")
+                if len(evento.recursos_herramienta) == 0: raise Exception("Debe seleccionar al menos 1 medio para su evento")
+                if len(evento.recursos_herramienta) > 5: raise Exception("Solo puede seleccionar hasta 5 medios para su evento")
                 if len(evento.recursos_persona) == 0: raise Exception("Debe seleccionar un cientifico para su evento")
+                
 
                 #Convirtiendo la entrada de la fecha inicio a etero
                 year = int(self.year_inicio.text)
@@ -344,23 +349,27 @@ class ButtonGuardar(ButtonBehavior,Image):
                 evento.recursos_sala.clear()
                 evento.recursos_sala.append([self.input_sala.text,1])
                 result_complementarios = operaciones.verificar_complementarios(evento.recursos_herramienta,evento.recursos_sala,evento.recursos_persona)
+                result_excluyentes = operaciones.verificar_excluyentes(evento.recursos_persona)
 
-                if result_complementarios == True:
-                    nombre = self.input_nombre.text
-                    fecha = datetime.datetime(year,month,day,hora,minu)
-                    fecha_fin = datetime.datetime(year_fin,month_fin,day_fin,hora_fin,minu_fin)
-                    recursos = evento.recursos_sala+evento.recursos_herramienta+evento.recursos_persona
+                if result_excluyentes == True:
+                    if result_complementarios == True:
+                        nombre = self.input_nombre.text
+                        fecha = datetime.datetime(year,month,day,hora,minu)
+                        fecha_fin = datetime.datetime(year_fin,month_fin,day_fin,hora_fin,minu_fin)
+                        recursos = evento.recursos_sala+evento.recursos_herramienta+evento.recursos_persona
 
-                    event = Evento(
-                        nombre= nombre,
-                        inicio= fecha,
-                        fin= fecha_fin,
-                        recursos=recursos
-                        )
+                        event = Evento(
+                            nombre= nombre,
+                            inicio= fecha,
+                            fin= fecha_fin,
+                            recursos=recursos
+                            )
 
-                    self.mostrar_error(operaciones.agregar_evento(event))
+                        self.mostrar_error(operaciones.agregar_evento(event))
+                    else:
+                        self.mostrar_error(result_complementarios)
                 else:
-                    self.mostrar_error(result_complementarios)
+                    self.mostrar_error(result_excluyentes)
 
     def restaurar_color(self,touch):
             self.source = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Copilot_20251117_003303.png"
@@ -399,8 +408,10 @@ class ButtonBuscarHueco(ButtonBehavior,Image):
             inicio = datetime.datetime.now()
             fin = inicio + datetime.timedelta(hours=int(self.horas.text))
             if self.input_nombre.text == "": raise Exception("Debe darle un nombre al evento")
+            if len(self.input_nombre.text) > 45: raise Exception("El nombre del evento solo puede tener hasta 45 caracteres")
             if self.input_sala.text == "Seleccione una sala": raise Exception("Debe seleccionar una sala")
-            if len(evento.recursos_herramienta) == 0: raise Exception("Debe seleccionar al menos 1 recurso herramienta")
+            if len(evento.recursos_herramienta) == 0: raise Exception("Debe seleccionar al menos 1 medio para su evento")
+            if len(evento.recursos_herramienta) > 5: raise Exception("Solo puede seleccionar hasta 5 medios para su evento")
             if len(evento.recursos_persona) == 0: raise Exception("Debe seleccionar un cientifico para su evento")
 
         #Si existe algun error esta parte manda a mostrarlo en pantalla

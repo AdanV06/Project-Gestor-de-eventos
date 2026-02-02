@@ -25,10 +25,10 @@ class Item_event(ButtonBehavior,BoxLayout):
             else:
                 recursos += f" {str(rec[0])},"
 
-        informacion = Label(text=f"              Recursos:\n{recursos}",font_size=12,text_size=(280,60),pos_hint={"center_x":0,"center_y":0.7},color=(1,1,1,1))
-        inf_hora = Label(text=self.hora,color=(0,0,0,1),size_hint=(None,None),size=(220,80))
+        informacion = Label(text=f"                  Recursos:\n{recursos}",font_size=14,text_size=(280,160),pos_hint={"center_x":0,"center_y":0.7},color=(1,1,1,1))
+        inf_hora = Label(text=f"       Fecha inicio    :      Fecha fin:\n{self.hora}",color=(0,0,0,1),size_hint=(None,None),size=(240,80),font_size=16,pos_hint={"center_x":0, "center_y":0.5})
         
-        self.add_widget(Label(text= self.nombre,font_size=20,text_size=(220,80),valign="center"))
+        self.add_widget(Label(text= self.nombre,font_size=20,text_size=(200,80),valign="center"))
         self.add_widget(inf_hora)
         self.add_widget(informacion)
 

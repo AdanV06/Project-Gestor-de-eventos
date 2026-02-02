@@ -33,16 +33,15 @@ def verificar_cantidad(recursos,evento_recursos):
 def verificar_recurso(recurso,recursos,rec):
     disp= 1000000
     for j in recursos:
-            if j.nombre == recurso:
-                print(f"Desde la funcion: {recurso}")
+            if j.nombre == rec[0]:
                 if j.cantidad == 1:
                     return f"El recurso {j.nombre} no esta disponible en ese horario"
                 else:disp = j.cantidad
                     
         
     disp -= rec[1]
-    if disp < rec[1]:
-        return f"No hay suficientes {r[0]} disponibles en ese horario, solo hay {disp} disponibles"
+    if disp < recurso[1]:
+        return f"No hay suficientes {rec[0]} disponibles en ese horario, solo hay {disp} disponibles"
 
 #Funcion para verificar si 2 eventos estan en el mismo horario
 def verificar_hora(ini_ev,ini_evs,fin_ev,fin_evs):
@@ -59,17 +58,15 @@ def leer_json(ruta):
 
 #Clase recurso
 class Recurso:
-    def __init__(self,nombre,tipo,disponibilidad,cantidad):
+    def __init__(self,nombre,tipo,cantidad):
         self.nombre = nombre
         self.tipo = tipo
-        self.disponibilidad = disponibilidad
         self.cantidad = cantidad
 
     def convertir_dicc(self):
         return {
             "nombre" : self.nombre,
             "tipo" : self.tipo,
-            "disponibilidad" : self.disponibilidad,
             "cantidad" : self.cantidad
         }
 
@@ -112,7 +109,7 @@ class Planificador:
         recursos_data = leer_json(self.json_recursos)
         #Guardando los recursos en una lista para poder ser iterados
         for r in recursos_data.get("recursos"):
-            recurso = Recurso(r["nombre"],r["tipo"],r["disponibilidad"],r["cantidad"])
+            recurso = Recurso(r["nombre"],r["tipo"],r["cantidad"])
             self.recursos.append(recurso)
 
     #Funcion para verificar los complementarios
@@ -208,8 +205,7 @@ class Planificador:
                 for rec in e.recursos:
                     if r[0] == rec[0]:
                         if verificar_hora(evento.inicio,e.inicio,evento.fin,e.fin):
-                            print(f"Desde el otro: {r[0]}")
-                            result = verificar_recurso(r[0],self.recursos,rec)
+                            result = verificar_recurso(r,self.recursos,rec)
                             if result != None :
                                 return result
 
@@ -221,11 +217,11 @@ class Planificador:
 
     #Funcion para agregar el evento en el mejor horario
     def buscar(self,evento,horas):
-        if len(self.eventos) == 0:
-            self.agregar_evento(evento)
+        if len(self.eventos) == 0: #Si no hay ningun evento agregado 
+            self.agregar_evento(evento)# Agregarlo en la primera posicion
             return "El evento se agrego correctamente"
-        eventos_ordenados = ordenar(self.eventos)
-        if len(self.eventos) == 1:
+        eventos_ordenados = ordenar(self.eventos) #Ordenar los eventos y guardarlos en una variable
+        if len(self.eventos) == 1: #
             a = self.agregar_evento(evento)
             if a != "El evento se agrego correctamente":
                 evento.inicio = self.eventos[0].fin
@@ -236,8 +232,11 @@ class Planificador:
         for i in range(len(self.eventos)+1):
             b = self.agregar_evento(evento)
             if b != "El evento se agrego correctamente":
-                evento.inicio = self.eventos[i].fin
-                evento.fin = evento.inicio + datetime.timedelta(hours=horas)
+                if b[:11] == "No contamos":
+                    return b
+                else:
+                    evento.inicio = self.eventos[i].fin
+                    evento.fin = evento.inicio + datetime.timedelta(hours=horas)
             else:
                 return "El evento se agrego correctamente"
 
