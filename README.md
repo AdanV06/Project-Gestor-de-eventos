@@ -100,7 +100,7 @@ Este sistema está diseñado específicamente para centros de investigación en 
 ### 🎫 1. Agregar Evento Manualmente
 **Descripción**: Permite crear un evento científico especificando todos los parámetros necesarios: nombre, fechas, recursos y sala.
 
-![Imagen de la ventana para agregar eventos](Imagenes_Readme/Ventana Agregar Evento.png)
+<img src="Imagenes_Readme/Ventana Agregar Evento.png">
 
 **Flujo de uso:**
 1. **Ingresar datos básicos:**
@@ -133,7 +133,7 @@ Este sistema está diseñado específicamente para centros de investigación en 
 ### 👁️ 3. Ver Eventos Planificados
 **Descripción**: Muestra todos los eventos guardados en una lista interactiva.
 
-![Imagen de la ventana Ver Eventos](Imagenes_Readme/Ventana Ver Eventos.png)
+<img src="Imagenes_Readme/Ventana Ver Eventos.png">
 
 **Características:**
 * **Lista scrollable**: Muestra todos los eventos verticalmente
@@ -147,7 +147,7 @@ Este sistema está diseñado específicamente para centros de investigación en 
 ### 👥 4. Selección de Personal Científico
 **Descripción**: Interfaz especializada para seleccionar científicos con información detallada.
 
-![Imagen de la ventana para seleccionar científicos](Imagenes_Readme/Ventana Cientificos.png)
+<img src="Imagenes_Readme/Ventana Cientificos.png">
 
 **Funcionalidades:**
 * **Ventana modal**: Popup con grid de 9 científicos
@@ -161,7 +161,7 @@ Este sistema está diseñado específicamente para centros de investigación en 
 ### 🔭 5. Selección de Herramientas y Telescopios
 **Descripción**: Interfaz para seleccionar equipos especializados con sus reglas específicas.
 
-![Imagen de la ventana para seleccionar recursos](Imagenes_Readme/Ventana Medios.png)
+<img src="Imagenes_Readme/Ventana Medios.png">
 
 **Funcionalidades:**
 * **Categorización visual**: 12 recursos organizados en grid
@@ -218,11 +218,11 @@ Este sistema está diseñado específicamente para centros de investigación en 
 * **Científicos**: Mínimo 1, no hay máximo
 * **Herramientas/telescopios**: Mínimo 1, máximo 5 por evento
 * **Recursos con cantidad (Gafas virtuales, Portátiles, Telescopio básico):**
-![Imagen del popup para ingresar la cantidad de determnado recurso](Imagenes_Readme/Mensaje de Cantidad.png)
+<img src="Imagenes_Readme/Mensaje de Cantidad.png">
     * Cantidad debe ser un número entero positivo
     * No puede exceder la cantidad disponible en inventario
 
-### 🔗 Validación de Complementariedad (Co-requisitos)
+### 🔗 Validación de Complementxariedad (Co-requisitos)
 #### 1. Telescopios que Requieren Científicos Específicos
 | Telescopio | Científicos Requeridos | Mensaje de Error |
 |------------|------------------------|------------------|
