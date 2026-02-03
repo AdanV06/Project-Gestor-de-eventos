@@ -23,5 +23,7 @@ kv4 = '''
             pos: self.pos
             size: self.size
 
-
+<Delete>:
+    size_hint: None,None
+    size: 50,50
 '''

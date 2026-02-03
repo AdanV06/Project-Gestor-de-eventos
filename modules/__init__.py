@@ -25,3 +25,4 @@ from modules.Stile_Vent_Ver_Eventos import*
 from modules.Class_vent_Agregar_Evento import *
 from modules.Class_Vent_Recursos import *
 from modules.Class_Vent_Ver_Eventos import *
+from kivy.config import Config
