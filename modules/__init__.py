@@ -1,3 +1,6 @@
+'''
+En este arcivo se cotienen todos medios que fueron importados para la creacion del proyecto
+'''
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout

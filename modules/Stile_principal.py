@@ -1,3 +1,8 @@
+'''
+En este archivo se tiene el estilo principal del programa,
+esta compuesto en su totalidad en lenguaje kv y solo forma parte de la interfaz grafica
+'''
+
 kv = '''
 <BoxL>:
     size_hint: None,None 

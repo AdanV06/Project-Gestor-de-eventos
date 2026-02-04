@@ -38,23 +38,87 @@ El sistema implementa una lógica de validación algorítmica que previene confl
 * **Feedback inmediato**: Mensajes de error claros y descriptivos para entradas inválidas.
 * **Navegación sencilla**: Dos vistas principales: "Agregar evento" y "Ver eventos".
 
+## 📁 Estructura del Proyecto <a id="-estructura-del-proyecto"></a>
+
+* A continuacion se muestra la estructura de carpetas y archivos del proyecto:
+
+```text
+│
+├── 📁 datas/                    # Datos del sistema
+│   ├── Eventos.json            # Json donde se almacenan los ecentos
+│   └── Recursos.json           # Json que contiene los recursos con sus datos
+│
+├── 📁 Imagenes_Readme/         #Imagenes de este archivo
+│
+├── 📁 Imagenes/                 # Assets gráficos
+│   ├── Boton_Persona.png
+│   ├── Boton_Recurso.png
+│   ├── Persona Seleccionada.png
+│   └── ... (más imágenes)
+│
+├── 📁 modules/                  # Módulos del sistema
+│   ├── __init__.py             # Inicialización de módulos
+│   ├── Backend1.py             # ✅ LÓGICA PRINCIPAL: Contiende todas las funciones del programa
+│   ├── Class_vent_Agregar_Evento.py  # Componentes de UI para agregar eventos
+│   ├── Class_Vent_Recursos.py        # Componentes de UI para selección de recursos
+│   ├── Imagenes.py                   # Rutas de las imagenes y informacion de los personajes y recursos
+│   ├── Class_Vent_Ver_Eventos.py     # Componentes de UI para ver eventos
+│   ├── Stile_principal.py            # Estilos para la ventana principal
+│   ├── Stile_vent_Agregar_Evento.py  # Estilos para ventana de agregar evento
+│   ├── Stile_Vent_Recursos.py        # Estilos para ventana de recursos
+│   └── Stile_Vent_Ver_Eventos.py     # Estilos para ventana de ver eventos
+│
+├── main.py                     # ✅ ARCHIVO PRINCIPAL: Punto de entrada, interfaz gráfica completa
+├── README.md                   # Este archivo
+```
+
+## 🔧 Instalación y Ejecución <a id="-instalación-y-ejecución"></a>
+### Paso 1: Clonar el Repositorio en tu pc y entrar a la carpeta 
+    **Ejecutar:**
+    ```bash
+        git clone https://github.com/AdanV06/Project-Gestor-de-eventos.git
+        cd Project-Gestor-de-eventos
+        ```
+
+### Paso 2: Crear un entorno virtual
+    **En Windows:**
+    ```bash
+        python -m venv venv
+        venv\Scripts\activate
+        ```
+    **En Linux:**
+    ```bash
+        python3 -m venv venv
+        source venv/bin/activate
+        ```
+### Paso 3: Insalar Dependencias
+    ***Ejecutar:***
+    ```bash
+        pip install -r requirements.txt
+        ```
+### Paso 4: Ejecutar la Aplicación
+    **Ejecutar:**
+    ```bash
+        python main.py
+    ```
+    
 ## 🎯 Dominio del Programa <a id="-dominio-del-programa"></a>
 
 Este sistema está diseñado específicamente para centros de investigación en astrofísica, donde la coordinación de recursos especializados es crítica para el éxito de experimentos y observaciones científicas.
 
 ### Catálogo Completo de Recursos
 #### 👨‍🔬 Científicos Especializados
-| Nombre | Especialidad | Compatibilidad | Exclusividades |
+| Nombre | Especialidad | Complementario | Exclusiones |
 |--------|--------------|----------------|----------------|
-| Carl Sagan | Divulgación y cosmología | Telescopio solar | No trabaja con Vera Rubin o Edwin Hubble |
+| Carl Sagan | Fenomenos del sol | Telescopio solar | No trabaja con Vera Rubin o Edwin Hubble |
 | Vera Rubin | Materia oscura y galaxias | Telescopio de Galaxias | No trabajar con Hans Bethe o Carl Sagan |
 | Henrietta Leavitt | Óptica y estrellas variables | Polarímetro, Espectrómetro, Sala de óptica | Ninguna |
 | Edwin Hubble | Expansión del universo | Telescopio de Galaxias | No trabajar con Hans Bethe o Carl Sagan |
 | Cleo Abram | Tecnología y planetarios | Planetario | Ninguna |
-| Margaret Burbidge | Núcleos galácticos y Luna | Telescopio Lunar | No trabajar con Stephen Hawking |
+| Margaret Burbidge | Geologia Lunar | Telescopio Lunar | No trabajar con Stephen Hawking |
 | Hans Bethe | Física solar | Telescopio solar | No trabaja con Vera Rubin o Edwin Hubble |
 | Neil Tyson | Astrofísica general | Compatible con todos los telescopios | Ninguna |
-| Stephen Hawking | Agujeros negros y cosmología | Telescopio de agujeros negros | No trabajar con Margaret Burbidge |
+| Stephen Hawking | Agujeros negrosc| Telescopio de agujeros negros | No trabajar con Margaret Burbidge |
 
 #### 🔭 Telescopios y Herramientas
 | Recurso | Tipo | Cantidad | Especialidad Requerida |
@@ -69,8 +133,8 @@ Este sistema está diseñado específicamente para centros de investigación en 
 | Polarímetro | Instrumento óptico | 1 | Solo usable por Henrietta Leavitt |
 | Espectrómetro | Instrumento óptico | 1 | Solo usable por Henrietta Leavitt |
 | Cámara estelar | Herramienta | 1 | Sin requerimientos específicos |
-| Portátiles | Equipamiento | 20 | Solo usable en Planetario o Sala de conferencias |
-| Gafas virtuales | Equipamiento | 20 | Solo usable en Planetario o Sala de conferencias |
+| Portátiles | Herramienta | 20 | Solo usable en Planetario o Sala de conferencias |
+| Gafas virtuales | Herramienta | 20 | Solo usable en Planetario o Sala de conferencias |
 
 #### 🏛️ Salas de Experimentación
 | Sala | Capacidad | Uso Principal | Especialista Requerido |

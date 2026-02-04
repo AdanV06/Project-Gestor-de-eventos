@@ -1,3 +1,8 @@
+'''
+En este archivo es donde se crea el estilo de los elementos de las ventanas para seleccionar recursos,
+esta compuesto en su totalidad en lenguaje kv y forma parte solamente de el diseño de la interfaz grafica
+'''
+
 kv3 = '''
 <informacion>:
     markup: True

@@ -85,7 +85,7 @@ class Evento:
             "recursos" : self.recursos
         }
 
-#Clase planificador donde contiene todas las funciones
+#Clase planificador donde contiene todas las funciones del programa
 class Planificador:
     def __init__(self,ruta_eventos="datas/Eventos.json",ruta_recursos="datas/Recursos.json"):
         self.eventos = []
@@ -97,7 +97,7 @@ class Planificador:
     
     #Guardar los eventos del json en una lista
     def cargar_eventos(self):
-        eventos_json = leer_json(self.json_eventos) #Leer el json y guardar su contenido en la variable eventos_json
+        eventos_json = leer_json(self.json_eventos) 
         for e in eventos_json.get("eventos"): 
             inicio = datetime.datetime.strptime(e["inicio"], "%Y-%m-%d-%H-%M") 
             fin = datetime.datetime.strptime(e["fin"], "%Y-%m-%d-%H-%M")
@@ -107,34 +107,38 @@ class Planificador:
     #Guardar los recursos del json en una lista 
     def cargar_recursos(self):
         recursos_data = leer_json(self.json_recursos)
-        #Guardando los recursos en una lista para poder ser iterados
         for r in recursos_data.get("recursos"):
             recurso = Recurso(r["nombre"],r["tipo"],r["cantidad"])
             self.recursos.append(recurso)
 
     #Funcion para verificar los complementarios
     def verificar_complementarios(self,recursos_herramienta,recurso_sala,recursos_personal):
-        recursos_json = leer_json("datas/Recursos.json")
+        recursos_json = leer_json("datas/Recursos.json")#Leer el Json de recursos y guardar el contenido en una variable
         band_sala = False
         band_rec = False
 
         #Verificar los complementarios para las salas
-        for i in range(len(recursos_json["recursos"])):
+        for i in range(len(recursos_json["recursos"])):#Iterar en los recursos del Json hasta encontrar la sala seleccionada
             if recurso_sala[0][0] == recursos_json["recursos"][i]["nombre"]:
-                comp = recursos_json["recursos"][i]["complementario"]
-                if comp == "NULL":
+                comp = recursos_json["recursos"][i]["complementario"]#Guardar la lista de recursos complementarios de la sala
+                if comp == "NULL":#Si no tiene recurso complementario validar la operacion y guardar Ture en una variable
                     band_sala = True
                 else:
-                    if comp[0] in recursos_personal:
+                    if comp[0] in recursos_personal:#Si el recurso complementario esta en la lista de cientificos seleccionado entonces guardar true en una variable
                         band_sala = True
                     else:
+                        #Buscar el recurso complementario que no esta en los recursos seleccionados y mandar el mensaje correspondiente
                         if recurso_sala[0][0] == "Planetario":
                             return f"En el {recurso_sala[0][0]} debe estar Cleo Abram la encargada de esta sala"
                         if recurso_sala[0][0] == "Sala de optica":
                             return f"En la {recurso_sala[0][0]} debe estar la especialista Henrietta Leavitt"
 
         #Verificar los complementarios para los recursos herramienta
-        for rec_event in recursos_herramienta:
+        for rec_event in recursos_herramienta:#Iterar en los recursos herramientas seleccionados
+
+            '''Buscar en el json los recursos complementarios de los recursos seleccionados y verificar que estos complementarios
+            esten dentro de la lista de recursos seleccionados
+            '''
             for i in range(len(recursos_json["recursos"])):
                 if rec_event[0] == recursos_json["recursos"][i]["nombre"]:
                     rec_comp = recursos_json["recursos"][i]["complementario"]
@@ -148,6 +152,7 @@ class Planificador:
                             else:
                                 band_rec = False
                         if band_rec == False:
+                            #Si a algun recurso le falto su complementario buscarlo cual es y mandar el mensaje de error correspondiente
                             if (rec_event[0] == "Gafas virtuales" or rec_event[0] == "Portatiles" or rec_event[0] == "Telescopio"):
                                 return f"El recurso {rec_event[0]} solo puede ser usado en la sala de conferencias o en el planetario"
 
@@ -171,49 +176,50 @@ class Planificador:
     
     #Funcion para verficar excluyentes
     def verificar_excluyentes(self,recursos_personal):
-        recursos_json = leer_json("datas/Recursos.json")
+        recursos_json = leer_json("datas/Recursos.json")#Leer el Json de recursos y guardar el contenido en una variable
         band = True
 
-        for rec in recursos_personal:
-            for i in range(len(recursos_json["recursos"])):
+        for rec in recursos_personal:#Iterar en los cientificos que fueron seleccionados
+            for i in range(len(recursos_json["recursos"])):#Iterar en los recursos del json hasta encontrar el nombre de el recurso seleccionado
                 if rec[0] == recursos_json["recursos"][i]["nombre"]:
-                    rec_ex = recursos_json["recursos"][i]["excluyentes"]
-                    if rec_ex == "NULL":
+                    rec_ex = recursos_json["recursos"][i]["excluyentes"]#Ver los excluyentes de ese recurso
+                    if rec_ex == "NULL":#Si el recurso no tiene excluyentes validar la operacion y guardar True en una variable
                         band = True
                     else:
-                        for n in rec_ex:
-                            if n in recursos_personal:
+                        for n in rec_ex:#Iterar en los excluyentes del recurso
+                            if n in recursos_personal:#Si entre los exluyentes esta algun recurso seleccionado negar la operacion y poner fasle en una bariable
                                 band = False
                                 break
-                        if band == False:
+                        if band == False:#Si la bariable bandera contiene false
+                            #Buscar el recurso excluyente y mandar el mensaje de error correspondiente
                             if (rec[0] == "Vera Rubin" or rec[0] == "Edwin Huble"):
                                 return "Los especialistas en galaxias no pueden trabajar junto a los especialistas en el sol"
                             if (rec[0] == "Margaret Burbidge"):
                                 return "Los especialistas en la luna no pueden trabajar con los especialistas en agujeros negros"
-        
+        #Si la variable bandera se mantubo en true validar la operacion y retornar True
         if band == True:
             return True
 
     #Funcion para agregar evento al json
     def agregar_evento(self,evento):
-        result = verificar_cantidad(self.recursos,evento.recursos)
+        result = verificar_cantidad(self.recursos,evento.recursos)#Verificar si se cuenta con la cantidad de los recursos solicitados
         if result != None:
-            return result
+            return result#Retornar mensaje de error en caso de que no se cuente con esa cantidad
         disp= 1000000
-        for r in evento.recursos:
-            for e in self.eventos:
-                for rec in e.recursos:
-                    if r[0] == rec[0]:
-                        if verificar_hora(evento.inicio,e.inicio,evento.fin,e.fin):
-                            result = verificar_recurso(r,self.recursos,rec)
+        for r in evento.recursos:#Iterando en los recursos del evento
+            for e in self.eventos:#Iterando en los eventos guardados
+                for rec in e.recursos:#Iterando en los recursos de los eventos guardados
+                    if r[0] == rec[0]:#Si hay 2 recursos que son iguales
+                        if verificar_hora(evento.inicio,e.inicio,evento.fin,e.fin):#Verificar si estan a la misma hora
+                            result = verificar_recurso(r,self.recursos,rec)#Si estan a la misma hora verificar la cantidad de ese recurso
                             if result != None :
-                                return result
+                                return result#Si el recurso estaba ocupado o no se tenia la cantidad de ese recurso retornar el mensaje de error
 
-        self.eventos.append(evento)
-        lista_eventos = [e.convertir_dicc() for e in self.eventos]
+        self.eventos.append(evento)#agregar el evento a la lista de eventos
+        lista_eventos = [e.convertir_dicc() for e in self.eventos]#Convertir a diccionarios los elementos de la lista de eventos
         with open(self.json_eventos,"w") as eventos_json:
-            eventos_json.write(json.dumps({"eventos" : lista_eventos}))
-        return "El evento se agrego correctamente"
+            eventos_json.write(json.dumps({"eventos" : lista_eventos}))#Agregaar los eventos al JSON
+        return "El evento se agrego correctamente" #Retornar mensaje de exito si se pudo agregar el evento exitosamente
 
     #Funcion para agregar el evento en el mejor horario
     def buscar(self,evento,horas):
@@ -221,20 +227,20 @@ class Planificador:
             self.agregar_evento(evento)# Agregarlo en la primera posicion
             return "El evento se agrego correctamente"
         eventos_ordenados = ordenar(self.eventos) #Ordenar los eventos y guardarlos en una variable
-        if len(self.eventos) == 1: #
+        if len(self.eventos) == 1: #Si solo hay un evento guardado agregarlo en el momento actual si da error agregarlo despues del evento guardado
             a = self.agregar_evento(evento)
             if a != "El evento se agrego correctamente":
                 evento.inicio = self.eventos[0].fin
                 evento.fin = evento.inicio + datetime.timedelta(hours=horas)
                 return self.agregar_evento(evento)
-            else:
+            else: #Luego de que se encuentre un horario retornar mensaje de exito
                 return "El evento se agrego correctamente"
-        for i in range(len(self.eventos)+1):
+        for i in range(len(self.eventos)+1): #Iterando en los eventos
             b = self.agregar_evento(evento)
-            if b != "El evento se agrego correctamente":
-                if b[:11] == "No contamos":
+            if b != "El evento se agrego correctamente": #Si no se pudo agregar en un horario:
+                if b[:11] == "No contamos":#Si el error es porque no se cuenta con la cantidad solicitada de un recurso retornar este error
                     return b
-                else:
+                else:#Si no agregarlo luego del siguiente evento
                     evento.inicio = self.eventos[i].fin
                     evento.fin = evento.inicio + datetime.timedelta(hours=horas)
             else:

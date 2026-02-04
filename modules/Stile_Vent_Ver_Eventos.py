@@ -1,3 +1,7 @@
+'''
+En este archivo se tienen los estilo de los elementos de la ventana Ver Eventos 
+este archivo es puramente en lenguaje kv y solo es parte puramente de el diseño de la interfaz grafica
+'''
 kv4 = '''
 <Item_event>:
     orientation: "horizontal"

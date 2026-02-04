@@ -88,10 +88,8 @@ class OpcionHerramienta(ButtonBehavior, Image,FloatLayout):
             apps.contenedor.body.nueva_ventana.recursos_herramienta.fila.imagen.source = self.img
             apps.contenedor.body.nueva_ventana.recursos_herramienta.fila.informacion.text = self.inf
             apps.contenedor.body.nueva_ventana.recursos_herramienta.fila.nombre = self.opcion
-            print(apps.contenedor.body.nueva_ventana.recursos_herramienta.fila.nombre)
             if self.state=="normal":
                 self.state = 'down'
-                print(self.state)
                 if self.opcion == "Gafas virtuales" or self.opcion == "Portatiles" or self.opcion == "Telescopio":
                     self.contenedor_cant = vent_cant()
                     self.cant = TextInput(size_hint=(None,None),size=(200,30),hint_text="Cantidad",cursor_color=(1,0,0,1),background_color=(0,0,0,0.4),font_size=17,pos = (476,435),foreground_color=(1,1,1,1))
@@ -113,11 +111,9 @@ class OpcionHerramienta(ButtonBehavior, Image,FloatLayout):
     def guardar(self,instance):
 
         try:
-            print(self.cant.text)
             evento.cantidad.append([self.opcion,int(self.cant.text)])
             if int(self.cant.text) <=0: raise Exception("Cantidad incorrecta")
             
-
         except Exception as e:
             error = e.args[0] if type(e) != ValueError else "Cantidad incorrecta"
             self.mostrar_error(error)
@@ -141,7 +137,7 @@ class BotonPersonal(ButtonBehavior,Image):
             self.size = (150,120)
             self.font_size = 23
             self.pos = (545,240)
-            self.source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Boton_Persona.png"
+            self.source="Imagenes/Boton_Persona.png"
 
         def on_touch_down(self,touch):
             if self.collide_point(*touch.pos):
@@ -190,7 +186,7 @@ class BotonPersonal(ButtonBehavior,Image):
             self.contenedor.add_widget(self.row4)
             self.menu.add_widget(self.contenedor)
 
-#Boton Aceptar que se utiliza para guardar las elecciones de recursos
+#Boton Aceptar que guarda las elecciones de recursos
 class botonAceptar(ButtonBehavior,Image):
     def __init__(self,all_opciones,popup,Id):
         super().__init__()
@@ -226,10 +222,6 @@ class botonAceptar(ButtonBehavior,Image):
                         n.append(1) #Agregarle como cantidad 1
                 evento.cantidad.clear() #Eliminar la lista de cantidades al finalizar
 
-            print(evento.recursos_persona)
-            print(evento.recursos_herramienta)
-            print(evento.recursos_sala)
-            
             self.popup.dismiss()
     
     def restaurar_color(self,touch):
@@ -289,23 +281,20 @@ class ButtonGuardar(ButtonBehavior,Image):
         self.error = Label(text=self.mensaje,size_hint=(None,None),size=(250,140),pos_hint={"center_x":0.3,"center_y":0},text_size=(200,140),valign='top')
         self.popup_error = Popup(title='Error',content=self.error,size_hint=(None, None),size=(250, 140),background_color=(0.2,0,0.6,0.9))
         self.popup_error.open()
-
         
     def on_touch_down(self,touch):
         if self.collide_point(*touch.pos):
-            self.source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Guardar_Touch.png"
+            self.source="Imagenes/Guardar_Touch.png"
             Clock.schedule_once(lambda dt: self.restaurar_color(touch), 0.15)
         
             #Esta parte verifica que no hallan errores en la entrada de los datos del evento
             try:
                 #Verificar si falta algun dato
                 if self.input_nombre.text == "": raise Exception("Debe darle un nombre al evento")
-                if len(self.input_nombre.text) > 30: raise Exception("El nombre del evento solo puede tener hasta 30 caracteres")
                 if self.input_sala.text == "Seleccione una sala": raise Exception("Debe seleccionar una sala")
                 if len(evento.recursos_herramienta) == 0: raise Exception("Debe seleccionar al menos 1 medio para su evento")
                 if len(evento.recursos_herramienta) > 5: raise Exception("Solo puede seleccionar hasta 5 medios para su evento")
                 if len(evento.recursos_persona) == 0: raise Exception("Debe seleccionar un cientifico para su evento")
-                
 
                 #Convirtiendo la entrada de la fecha inicio a etero
                 year = int(self.year_inicio.text)
@@ -344,8 +333,6 @@ class ButtonGuardar(ButtonBehavior,Image):
             
             #Si no hubo ningun error verificar los complementarios de los recursos y guardar el evento 
             else:
-                print(f"Recursos herramienta: {evento.recursos_herramienta}")
-                print(f"Recursos sala: {evento.recursos_sala}")
 
                 evento.recursos_sala.clear()
                 evento.recursos_sala.append([self.input_sala.text,1])
@@ -373,7 +360,7 @@ class ButtonGuardar(ButtonBehavior,Image):
                     self.mostrar_error(result_excluyentes)
 
     def restaurar_color(self,touch):
-            self.source = "/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Copilot_20251117_003303.png"
+            self.source = "Imagenes/Copilot_20251117_003303.png"
 #Boton para Buscar horario disponible para el evento
 class ButtonBuscarHueco(ButtonBehavior,Image):
     def __init__(self,input_nombre,input_sala):
@@ -386,7 +373,6 @@ class ButtonBuscarHueco(ButtonBehavior,Image):
             self.source="Imagenes/Buscar Horario_pulsado.png"
             Clock.schedule_once(lambda dt: self.restaurar_color(touch), 0.15)
             self.pedir_duracion(touch)
-            
             
     def pedir_duracion(self,touch):
         self.contenedor = vent_cant()
@@ -409,7 +395,6 @@ class ButtonBuscarHueco(ButtonBehavior,Image):
             inicio = datetime.datetime.now()
             fin = inicio + datetime.timedelta(hours=int(self.horas.text))
             if self.input_nombre.text == "": raise Exception("Debe darle un nombre al evento")
-            if len(self.input_nombre.text) > 45: raise Exception("El nombre del evento solo puede tener hasta 45 caracteres")
             if self.input_sala.text == "Seleccione una sala": raise Exception("Debe seleccionar una sala")
             if len(evento.recursos_herramienta) == 0: raise Exception("Debe seleccionar al menos 1 medio para su evento")
             if len(evento.recursos_herramienta) > 5: raise Exception("Solo puede seleccionar hasta 5 medios para su evento")
@@ -420,7 +405,7 @@ class ButtonBuscarHueco(ButtonBehavior,Image):
             error = e.args[0] if type(e) != ValueError else "El formato de la duracion es incorrecto"
             self.mostrar_error(error)
         
-        #Si no hubo errores en la entrada se verifican sus complementarios y se manda a guardar el evento en un horario disponible
+        #Si no hubo errores en la entrada se verifican sus complementarios  y excluyentes, luego se manda a guardar el evento en un horario disponible
         else:
             evento.recursos_sala.clear()
             evento.recursos_sala.append([self.input_sala.text,1])
@@ -548,7 +533,7 @@ class cont_event(BoxLayout):
         for event in eventos.get("eventos"):
             self.add_widget(Item_event(self,event,nombre=event["nombre"],info=event["recursos"],hora=f"{event["inicio"]} : {event["fin"]}"))
 
-
+#Contenedor de la ventana Ver Eventos
 class Ver_Eventos(FloatLayout):
     def __init__(self):
         super().__init__()
@@ -558,19 +543,20 @@ class Ver_Eventos(FloatLayout):
         self.lista_eventos.add_widget(self.contenedor_eventos)
         self.add_widget(self.lista_eventos)
 
-#Texto del titulo
+#Contenedor del texto del titulo
 class Texto(Label):
     def __init__(self):
         super().__init__()        
 
-#BoxLayout que contiene el titulo
+#BoxLayout que contiene el titulo de el centro
 class Titulo(BoxLayout):
     def __init__(self):
         super().__init__()
-        self.imagen = Image(source="/home/adan/Adan/Programacion/Projects/Project Pro 1/Imagenes/Copilot_20251116_040931.png",size_hint= (None,None), size= (100,65))
+        self.imagen = Image(source="Imagenes/Copilot_20251116_040931.png",size_hint= (None,None), size= (100,65))
         self.add_widget(self.imagen)
         self.add_widget(Texto())
 
+#Botones para cambiar de ventana (Ver Eventos - Agregar Evento)
 class Buttons(Button):
     def __init__(self,texto):
         super().__init__(text=texto)
@@ -596,7 +582,7 @@ class BoxButtons(BoxLayout):
         self.box_principal.mostrar(instance.contenido)
         self.box_principal.resaltar_boton_activo(instance)
 
-#BoxLayout que contiene todas las opciones del programa
+#BoxLayout contenedor de las ventanas Ver Eventos y Agregar Evento
 class BoxL(BoxLayout):
     def __init__(self):
         super().__init__()
@@ -632,7 +618,6 @@ class BoxL(BoxLayout):
             else:
                 boton.background_color = color_inactivo
                 boton.color = (1, 1, 1, 1)  
-
 
 #Clase contenedor que contiene toda la interfaz
 class Contenedor(FloatLayout):

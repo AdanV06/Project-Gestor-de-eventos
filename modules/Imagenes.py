@@ -1,4 +1,6 @@
-
+'''
+Este archivo contiene las rutas de las imagenes de los recursos y sus descripciones
+'''
 
 #Imagenes de la ventana herramientas
 objeto2 = "Imagenes/Polarimetro.png"
@@ -14,7 +16,6 @@ objeto11 = "Imagenes/Telescopio Solar.png"
 objeto12 = "Imagenes/Radio Telescopio.png"
 objeto13 = "Imagenes/Telescopio simple.png"
 
-
 #Imagenes de la ventana recurso persona
 persona1 = "Imagenes/Carl Sagan.png"
 persona2 = "Imagenes/Vera Rubin.png"
@@ -26,31 +27,30 @@ persona9 = "Imagenes/Hans Bethe.png"
 persona10 = "Imagenes/Neil Tyson.png"
 persona11 = "Imagenes/Stiphen Hawking.png"
 
-
 #Informacion de los cientificos
-inf1 = "Carl Sagan:\n\nEspecialista en el estudio del sol y de ondas transmitidas por este"
-inf2 = "Vera Rubin:\n\nEs especialista en galaxias, puede realizar estudios sobre cualquier galaxias o astro lejano, al igual que impartir conferencias"
-inf3 = "Henrietta Leavitt:\n\nEs la especialista en optica, cualquier evento que requiera de el estudio de la luz de las estrellas o galaxias"
-inf5 = "Edwin Huble:\n\nEspecialista en el estudio de galaxias, se encarga de el estudio de cualquier galaxia lejana utilizando el telescopio de galaxias, puede impartir conferencias para estudiantes y visitantes"
-inf6 = "Cleo Abram\n\nEs la encargada de la sala Planetario, ademas de impartir conferencias sobre el sistema solar, pude tener compania de cualquier otro especialista"
-inf8 = "Margaret Burbidge:\n\nEncargada de el estudio y observacion de la luna, utilizando el telescopio lunar, y puede impartir conferencias para estudiantes o visitantes"
-inf9 = "Hans Bethe:\n\nEspecialista en la observacion del sol, y en cualquier tipo de estudio sobre este, asi como impartir conferencias para otras personas"
-inf10 = "Neil Tyson:\n\nSe especializa en cualquier tipo de estudio u obervacion, puede manipular cualquier tipo de telescopio y puede hacer conferencias sobre cualquier tema"
-inf11 = "Stiphen Hawking:\n\nEspecialista en agujeros negros,encargado de cualquier evento sobre el estudio de los agujeros negros utilizando el telescopio de agujeros negros"
+inf1 = "Carl Sagan:\n\nEspecialista en observación solar y fenómenos atmosféricos del Sol, encargado de operaciones con el Telescopio solar."
+inf2 = "Vera Rubin:\n\nEspecialista en observación de galaxias y estudio de materia oscura, operadora principal del Telescopio de Galaxias."
+inf3 = "Henrietta Leavitt:\n\nEspecialista en instrumentación óptica y calibración, única operadora autorizada del Polarímetro y Espectrómetro, y encargada de la sala de óptica."
+inf5 = "Edwin Huble:\n\nExperto en clasificación galáctica y expansión cósmica, encargado de mapeo y análisis de estructuras galácticas."
+inf6 = "Cleo Abram\n\nEspecialista en sistemas de planetario y tecnología educativa, responsable exclusiva del Planetario del centro."
+inf8 = "Margaret Burbidge:\n\nEspecialista en geología lunar y observación de cráteres, operadora principal del Telescopio Lunar."
+inf9 = "Hans Bethe:\n\nExperto en física solar y procesos de fusión nuclear estelar, responsable de análisis de datos de actividad solar."
+inf10 = "Neil Tyson:\n\nAstrofísico versátil capaz de operar todos los telescopios del centro, especializado en coordinación de eventos complejos."
+inf11 = "Stiphen Hawking:\n\nEspecialista en observación de agujeros negros y fenómenos gravitacionales extremos, operador del Telescopio de agujeros negros."
 
 #Informacion de los objetos
-obj2= "Este es el polarimetro"
-obj3= "Esta es la camara estelar "
-obj4= "Este es el espectrometro"
-obj5= "Este es el telesopio de galaxias"
-obj6= "Este es el portatil"
-obj7= "Esta es telescopio de agujeros negros"
-obj8= "Gafas virtuales\n\nSe utizan para los expectadores que visiten la sala de conferencias o el planetario\n\n[b] Salas:\n-Planetario, Sala de conferencias[/b]"
-obj9= "Este es el telescopio Lunar"
-obj10= "Este es el telescopio de Rayos Gama"
-obj11= "Este es el telescopio solar"
-obj12= "Este es el radiotelescopio"
-obj13= "Este es el telescopio simple"
+obj2= "[b]Polarímetro[/b]\n\nInstrumento óptico que mide la polarizacion de la luz, es esencial para estudiar la composición y estructura de objetos celestes\n[b]Complementario:\nEspecialista Henrietta Leavitt"
+obj3= "[b]Camara Estelar[/b]\n\nCámara especializada de alta sensibilidad para astrofotografía y captura de imágenes de objetos celestes.\n[b]Complementario:\nPuede ser utilizado para cualquier estudio"
+obj4= "[b]Espectrometro[/b]\n\nAnaliza la composición espectral de la luz para determinar la composicion química, temperatura y movimiento de objetos astronomicos\n[b]Complementario:\nEspecialista Henrietta Leavitt"
+obj5= "[b]Telesopio de Galaxias[/b]\n\nDiseñado para observar galaxias distantes, estudiar su estructura y analizar la materia oscura\n\n[b]Complementario:\nEspecialista en Galaxias "
+obj6= "[b]Portatil[/b]\n\nEquipos utilizado para procesamiento de datos en tiempo real durante conferencias o exposiciones.\n\n[b]Salas:\n-Planetario, Sala de conferencias"
+obj7= "[b]Telescopio de agujeros negros[/b]\n\nInstrumento avanzado para detectar y estudiar agujeros negros y su radiación circundante\n\n[b]Complementario: \nEspecialista en Agujeros Negros"
+obj8= "[b]Gafas virtuales[/b]\n\nDispositivos de realidad virtual para simulaciones astronómicas y experiencias inmersivas en conferencias y exposiciones\n[b] Salas:\n-Planetario, Sala de conferencias[/b]"
+obj9= "[b]Telescopio Lunar[/b]\n\nSe utiliza para obsevar la superficie lunar, estudiar cráteres y realizar mapeos topográficos de la Luna\n\n[b]Complementario:\nEspecialista en la Luna"
+obj10= "[b]Telescopio de Rayos Gama[/b]\n\nCapta radiacón gamma del espacio para estudiar eventos energeticos como supernovas y otros fenómenos\n[b]Puede ser utilizado por cualquier especialista para cualquier investigación"
+obj11= "[b]Telescopio solar[/b]\n\nEquipo especializado para observar el Sol de forma segura, estudiando manchas solares y actividad solar\n[b]Complementario:\nEspecialista en el Sol"
+obj12= "[b]Radio Telescopio[/b]\n\nRecibe ondas de radio del espacio para estudiar objetos celestes que no emiten luz visible, como nubes de gas interestelar\n[b]Puede ser utilizado por cualquier especialista para cualquier investigacion"
+obj13= "[b]Telescopio básico[/b]\n\nTelescopio para visitantes, utilizado para observación astrómica básica y actividades educativas\n[b]Salas:\n-Planetario, Sala de conferencias"
 
-
+#á é í ó ñ
 

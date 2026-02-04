@@ -8,6 +8,10 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.clock import Clock
 from modules.Backend1 import *
 
+'''
+En este archivo se contienen todas las clases declaradas utilzadas en la creacion de la ventana Ver Evetos
+'''
+
 #BoxLayout que contiene la informacion del evento
 class Item_event(ButtonBehavior,BoxLayout):
     def __init__(self,parent,evento,nombre,info,hora):
@@ -37,6 +41,7 @@ class Item_event(ButtonBehavior,BoxLayout):
         self.add_widget(informacion)
         self.add_widget(delete_button)
 
+#Boton para eliminar recursos guardados
 class Delete(ButtonBehavior,Image):
         def __init__(self,parent,child):
             super().__init__()
@@ -54,7 +59,7 @@ class Delete(ButtonBehavior,Image):
                 with open(ruta_eventos, "w") as data:
                     json.dump(eventos, data, indent=4)
                 
-        
+
 
 
             
