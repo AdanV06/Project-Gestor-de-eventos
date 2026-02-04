@@ -74,33 +74,33 @@ El sistema implementa una lógica de validación algorítmica que previene confl
 
 ## 🔧 Instalación y Ejecución <a id="-instalación-y-ejecución"></a>
 ### Paso 1: Clonar el Repositorio en tu pc y entrar a la carpeta 
-    **Ejecutar:**
-    ```bash
-        git clone https://github.com/AdanV06/Project-Gestor-de-eventos.git
-        cd Project-Gestor-de-eventos
-        ```
+**Ejecutar:**
+```bash
+git clone https://github.com/AdanV06/Project-Gestor-de-eventos.git
+cd Project-Gestor-de-eventos
+```
 
 ### Paso 2: Crear un entorno virtual
-    **En Windows:**
-    ```bash
-        python -m venv venv
-        venv\Scripts\activate
-        ```
-    **En Linux:**
-    ```bash
-        python3 -m venv venv
-        source venv/bin/activate
-        ```
+**En Windows:**
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+**En Linux:**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+ ```
 ### Paso 3: Insalar Dependencias
-    ***Ejecutar:***
-    ```bash
-        pip install -r requirements.txt
-        ```
+ ***Ejecutar:***
+```bash
+pip install -r requirements.txt
+```
 ### Paso 4: Ejecutar la Aplicación
-    **Ejecutar:**
-    ```bash
-        python main.py
-    ```
+**Ejecutar:**
+```bash
+python main.py
+ ```
     
 ## 🎯 Dominio del Programa <a id="-dominio-del-programa"></a>
 
